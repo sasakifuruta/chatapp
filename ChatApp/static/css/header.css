@@ -1,0 +1,40 @@
+header {
+    background-color: #ffffff;
+    display: flex;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+}
+
+/* ヘッダーのアプリ名の位置 */
+.header-top{
+    width: calc(100% - (46px + 30px));
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    
+}
+
+/* 戻るボタン */
+.return-link {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+/* 人型アイコン */
+.avatar {
+    font-size: 40px;
+    color: rgb(75, 140, 40);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+

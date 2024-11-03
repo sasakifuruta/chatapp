@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/apptitle.css">
+    <title>Welcome</title>
+</head>
+
+<body>
+    <div class="container-wrap">
+        <div class="container">
+            <h1 class="welcome-msg app-name">AppName
+            </h1>
+            <!-- 新規登録ボタンを押したらモーダル表示 -->
+            <button class="btn-black-short modal-open" type="button" id="js-modal-open">新規登録</button>
+            <button class="btn-white-short" type="button" onclick="location.href='リンク先のURL'">ログイン</button>
+        </div>
+        <!-- モーダル本体 -->
+        <div class="modal" id="js-modal">
+            <div class="modal-container">
+                <!-- モーダルを閉じるボタン -->
+                <div class="modal-close" id="js-modal-close">✖️</div>
+                <!-- モーダル内部のコンテンツ -->
+                <div class="modal-content">
+                    <div class="modal-text">
+                        <h3>〜お知らせ〜</h3>
+                        <p>時計が22時を指したら、
+                            何かがあなたを見ているかも…
+                            22時になったら寝ましょうね！
+                        </p>
+                        <a href="#">続ける</a>
+                    </div>
+                    <img src="../static/img/mom-kind.png" alt="" srcset="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 要素を取得
+        const modal = document.getElementById('js-modal');
+        const open = document.getElementById('js-modal-open');
+        const close = document.getElementById('js-modal-close');
+
+        // 「新規登録」ボタンをクリックしてモーダルを開く
+        function modalOpen() {
+            modal.classList.add('is-active');
+        }
+        open.addEventListener('click', modalOpen);
+
+        // 閉じるボタンをクリックしてモーダルを閉じる
+        function modalClose() {
+            console.log("aaa");
+            modal.classList.remove('is-active');
+        }
+        close.addEventListener('click', modalClose);
+
+        // モーダルの外側をクリックしてモーダルを閉じる
+        function modalOut(e) {
+            if (e.target == modal) {
+                modal.classList.remove('is-active');
+            }
+        }
+        addEventListener('click', modalOut);
+
+    </script>
+</body>
+
+</html>
