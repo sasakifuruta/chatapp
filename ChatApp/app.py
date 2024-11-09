@@ -7,12 +7,30 @@
 # flaskをインポート
 
 # 必要なライブラリをインポート（uuid,hashlib等）
-
+import datetime
 # models.pyからインポート
 
 
 # flaskのお決まりの冒頭文、セッションの有効期間の指定
 # セッションの内容やflashメッセージを暗号化
+
+# モーダル（利用説明）の「次へ」を押した際の挙動
+# エンドポイント、メソッドの指定（激おこはGET,ログインはPOST）
+# @app.route('', mesods=['GET', 'POST'])
+
+
+def angry_mom():
+# 現在の時刻を取得
+  now = datetime.datetime.now()
+  now_hour = now.hour
+
+  # if:22:00~6:00の場合、return 激おこhtml
+  if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+    return 
+
+  # else:以下
+  else:
+  
 
 
 # 新規登録画面の表示
