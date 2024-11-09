@@ -2,7 +2,7 @@ import pymysql
 import pymysql.cursors
 
 class DB:
-    def getConnection():
+    def getConnection() -> pymysql.Connection:
         try:
             conn = pymysql.connect(
                 host = "db",  #RDS接続時にはdbをRDSアドレスに変更する

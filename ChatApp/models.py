@@ -20,7 +20,6 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
             
     
     # アクティブなユーザを取得
@@ -38,7 +37,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
+
     
     
     # アカウント・プロフィール画像編集
@@ -55,7 +54,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
+
     
 
     # 退会処理
@@ -72,7 +71,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
+
 
 
     # 全グループを取得
@@ -90,7 +89,7 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
-                conn.close()
+
             
     
     @staticmethod
@@ -107,7 +106,7 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
-                conn.close()
+
     
     
     @staticmethod
@@ -124,7 +123,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
+
             
     
     # グループ追加
@@ -141,8 +140,8 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
-                
+
+
     
     # グループ編集
     @staticmethod
@@ -158,8 +157,8 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
-                
+
+
     
     # グループ削除
     @staticmethod
@@ -175,8 +174,8 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
-                
+
+
     
     # メッセージを取得
     @staticmethod
@@ -193,8 +192,8 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
-                
+
+
     
     # メッセージ追加
     @staticmethod
@@ -210,8 +209,8 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
-                
+
+
     
     # メッセージ更新
     @staticmethod
@@ -227,8 +226,8 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
-                conn.close()
-                    
+
+
     
     # メッセージ削除
     @staticmethod
@@ -244,4 +243,3 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
-            conn.close()
