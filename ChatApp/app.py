@@ -23,9 +23,13 @@ def add_message():
     
     return redirect(f'/detail/{cid}')
 
+# メッセージの更新
+@app.route('')
 
-# メッセージ削除
-@app.route('delete_message', methods=['POst'])
+
+
+# メッセージの削除
+@app.route('delete_message', methods=['POST'])
 def delete_message():
     uid = session.get('uid')
     # アクティブなユーザか
