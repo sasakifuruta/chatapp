@@ -34,8 +34,8 @@ CREATE TABLE messages (
     send_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  --　送信時間
 );
 
-INSERT INTO users(uid, user_name, email, password)VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テストですよ','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
-INSERT INTO groups(id, uid, name)VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8','テスト用');
-INSERT INTO messages(id, uid, gid, content)VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください、、')
+INSERT INTO users(uid, user_name, email, password, is_active, profile_img)VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テストですよ','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578', 1, 'http://yahoo.co.jp/img.png');
+INSERT INTO chat_groups(id, uid, name, chat_group_img)VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8','テスト用', 'http://yahoo.co.jp/img.png');
+INSERT INTO messages(id, uid, cid, content, send_at)VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください、、', '2024-11-10 23:30:00')
 
 
