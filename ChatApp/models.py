@@ -20,6 +20,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
             
     
     # アクティブなユーザを取得
@@ -37,6 +38,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
     
     
@@ -54,6 +56,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
     
 
@@ -71,6 +74,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
 
@@ -89,6 +93,7 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
+                conn.close()
 
             
     
@@ -106,6 +111,7 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
+                conn.close()
 
     
     
@@ -123,6 +129,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
             
     
@@ -140,6 +147,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
     
@@ -157,6 +165,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
     
@@ -174,6 +183,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
     
@@ -192,6 +202,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
     
@@ -209,6 +220,7 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
 
 
     
@@ -226,6 +238,7 @@ class dbConnect:
                 abort(500)
             finally:
                 cur.close()
+                conn.close()
 
 
     
@@ -243,3 +256,4 @@ class dbConnect:
             abort(500)
         finally:
             cur.close()
+            conn.close()
