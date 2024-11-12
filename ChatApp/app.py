@@ -19,16 +19,16 @@ app.permanent_session_lifetime = timedelta(days=30)
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_s')
 def show_signup():
-  return render_template("新規登録html画面")
+  return render_template('registration/signup.html')
 
 # 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
 @app.route('/process_signup', methods=['POST'])
 # 登録フォームに入力された値を変数に格納
 def process_signup_form():
-  name = request.form.get('name')
+  name = request.form.get('user_name')
   email = request.form.get('email')
-  password1 = request.form.get('password1')
-  password2 = request.form.get('password2')
+  password1 = request.form.get('password')
+  password2 = request.form.get('password_confirm')
 
   # mailのパターン認識(バリデーション)
   regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -57,7 +57,7 @@ def process_signup_form():
       session['uid'] = user_id
       return redirect('/')
 
-  return render_template("新規登録html画面")
+  return render_template("/registration/hoge.html")
 
 
 # ログインページの表示
@@ -66,7 +66,7 @@ def process_signup_form():
 
 @app.route('/next_step_l')
 def show_login():
-  return render_template("ログインhtml画面")
+  return render_template('registration/login.html')
 
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
 @app.route('/process_login', methods=['POST'])
@@ -91,7 +91,7 @@ def process_login_form():
       else:
         session['uid'] = user["uid"]
         return redirect('/') # '/'がホーム画面でいいか確認する
-  return render_template("ログインhtml画面")    
+  return render_template('registration/login.html')    
 
 
 # ログアウト
@@ -122,4 +122,6 @@ def withdraw_account():
       return redirect("アプリタイトルhtml画面のエンドポイント") # アプリタイトル画面に返す？
       # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
 
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
 
