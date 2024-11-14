@@ -17,6 +17,19 @@ app.permanent_session_lifetime = timedelta(days=30)
 # アカウント作成
 # アプリタイトル画面の新規登録ボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_s'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
+
+@app.route('/next_step_s')
+def show_signup():
+  now = datetime.datetime.now()
+  now_hour = now.hour
+  if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+    return render_template('registration/anger-mom.html')
+  else:
+    return render_template("新規登録html画面")
+
+
+
+
 @app.route('/next_step_s')
 def show_signup():
   return render_template('registration/signup.html')
@@ -63,6 +76,18 @@ def process_signup_form():
 # ログインページの表示
 # アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
+
+@app.route('/next_step_l')
+def show_login():
+  now = datetime.datetime.now()
+  now_hour = now.hour
+  if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+    return render_template('registration/anger-mom.html')
+  else:
+    return render_template("ログインhtml画面")
+
+
+
 
 @app.route('/next_step_l')
 def show_login():
