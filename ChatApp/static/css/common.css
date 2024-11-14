@@ -1,0 +1,59 @@
+/* ==================== */
+/* 共通 =============== */
+/* ==================== */
+* {
+    margin: 0;
+    padding: 0;
+}
+.container-wrap {
+    margin: 0px auto;
+    width: 100%;
+}
+
+/* ボタンのスタイル↓↓ */
+.btn-black-short {
+    width: 160px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 20px;
+    
+}
+.btn-white-short{
+    width: 160px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 10px 20px;
+}
+.btn-black-long {
+    width: 90%;
+    max-width: 400px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 20px;
+}
+.btn-white-long {
+    width: 90%;
+    max-width: 400px;
+    background-color: white;
+    color: black;
+    border-radius: 6px;
+    padding: 10px 20px;
+}
+/* ボタンのスタイル↑↑ */
+
+/* アプリの名前のフォント */
+@import url('https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&display=swap');
+.app-name{
+    font-family: "Martian Mono", monospace;
+}
+
+
+/* ヘッダー下のページタイトル */
+.page_title {
+    margin: 20px calc(10%) 0;
+    font-size: 1.3em;
+}
