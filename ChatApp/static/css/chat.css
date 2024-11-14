@@ -1,0 +1,158 @@
+/* チャット部分 */
+.container {
+    padding: 20px 10px;
+}
+.msgs-area {
+    display: flex;
+    flex-wrap: nowrap;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.msgs-area.left {
+    flex-direction: row;
+}
+
+.msgs-area.right {
+    flex-direction: row-reverse;
+}
+.msgs-area.right:not(figure) {
+    align-items: end;
+}
+.edit-icon {
+    padding-bottom: 15px;
+}
+
+/* 吹き出し部分 */
+.chatting {
+    position: relative;
+    display: inline-block;
+    margin: 10px 20px;
+    padding: 10px 20px;
+    background-color: #CCFFFF;
+    text-align: left;
+    border-radius: 12px;
+    max-width: 300px;
+    
+}
+
+/* 吹き出しの三角部分 */
+.chatting::after {
+    content: "";
+    border: 15px solid transparent;
+    border-top-color: #CCFFFF;
+    position: absolute;
+    top: 0px;
+}
+
+.left .chatting::after {
+    left: -15px;
+}
+
+.right .chatting::after {
+    right: -15px;
+}
+
+
+/* アバターとユーザー名 */
+.icon-img{
+    text-align: center;
+}
+/* アバター */
+.msgs-area .user-avatar {
+    border-radius: 50%;
+    /* border: 2px solid #333300; */
+    margin: 0;
+}
+/* アバター大きさ */
+.user-avatar{
+    font-size: 45px;
+}
+/* ユーザーの名前 */
+.icon-name {
+    width: 80px;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* 編集アイコンを押したときに表示するtextarea */
+.edit-text form {
+    display: flex;
+    align-items: end;
+}
+.btn-update, .btn-delete {
+    border: none;
+    background: none;
+    /* margin-right: 20px; */
+    font-size: 20px;
+}
+.edit-text textarea {
+    margin: 0 6px 0 25px;
+    font-size: 1.3em;
+    padding: 10px;
+    height: 60px;
+}
+
+.edit-chat-text {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* メッセージ入力欄 */
+.send-msg {
+    display: block;
+    width: 100%;
+    height: 55px;
+    position: fixed;
+    bottom: 0;
+    background-color: aqua;
+}
+
+.send-msg form {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    height: 100%;
+}
+
+.send-msg button {
+    width: 45px;
+    height: 100%;
+    background-color: #D2D2D2;
+}
+
+.send-msg-icon {
+    font-size: 2em;
+    color: #80C4F8;
+}
+
+.send-msg textarea {
+    height: 100%;
+    width: calc(100% - 45px);
+    border: #000 solid 2px;
+    box-sizing: border-box;
+    background-color: #D2D2D2;
+    font-size: 2em;
+    line-height: 1.5em;
+    padding: 8px 10px;
+}
+
+.send-msg textarea[type="text"]:focus,
+.send-msg textarea[type="text"]:focus+button {
+    border: #000 solid 2px;
+    outline: none;
+    background-color: #fff;
+}
