@@ -10,12 +10,10 @@ class dbConnect:
     @staticmethod
     def createUser(uid, name, email, password):
         try:
-            print('nao')
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s);"
             cur.execute(sql, (uid, name, email, password))
-            # cur.execute(sql)
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -85,7 +83,7 @@ class dbConnect:
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "SELECT * FROM groups;"
+                sql = "SELECT * FROM chat_groups;"
                 cur.execute(sql)
                 groups = cur.fetchall()
                 return groups
@@ -103,7 +101,7 @@ class dbConnect:
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "SELECT * FROM groups WHERE id=%s;"
+                sql = "SELECT * FROM chat_groups WHERE id=%s;"
                 cur.execute(sql, (gid,))
                 group = cur.fetchone()
                 return group
@@ -121,7 +119,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "SELECT * FROM groups WHERE name=%s;"
+            sql = "SELECT * FROM chat_groups WHERE name=%s;"
             cur.execute(sql, (group_name,))
             group = cur.fetchone()
             return group
@@ -140,7 +138,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO groups (uid, name, img_url) VALUES (%s, %s, %s);"
+            sql = "INSERT INTO chat_groups (uid, name, img_url) VALUES (%s, %s, %s);"
             cur.execute(sql, (uid, newGroupName, newGroup_img))
             conn.commit()
         except Exception as e:
@@ -154,12 +152,12 @@ class dbConnect:
     
     # グループ編集
     @staticmethod
-    def updateGroup(uid, newGroupName, newGroup_img, gid):
+    def updateGroup(uid, newGroupName, newGroup_img, cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE groups SET uid=%s, name=%s, img_url=%s WHERE id=%s;"
-            cur.execute(sql, (uid, newGroupName, newGroup_img, gid))
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, img_url=%s WHERE id=%s;"
+            cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -172,11 +170,11 @@ class dbConnect:
     
     # グループ削除
     @staticmethod
-    def deleteGroup(gid):
+    def deleteGroup(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "DELETE FROM groups WHERE id=%s;"
+            sql = "DELETE FROM chat_groups WHERE id=%s;"
             cur.execute(sql, (gid,))
             conn.commit()
         except Exception as e:
@@ -194,7 +192,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "SELECT id,u.uid, user_name, content FROM messages AS m INNER JOIN users As u ON m.uid=u.uid WHERE gid=%s;"
+            sql = "SELECT id,u.uid, user_name, content FROM messages AS m INNER JOIN users As u ON m.uid=u.uid WHERE cid=%s;"
             cur.execute(sql, (gid,))
             messages = cur.fetchall()
             return messages
@@ -213,7 +211,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO messages(uid, gid, content) VALUES(%s,%s,%s);"
+            sql = "INSERT INTO messages(uid, cid, content) VALUES(%s,%s,%s);"
             cur.execute(sql, (uid, gid, content))
             conn.commit()
         except Exception as e:
