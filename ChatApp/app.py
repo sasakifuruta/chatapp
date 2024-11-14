@@ -25,14 +25,8 @@ def show_signup():
   if (22 <= now_hour < 24) or (0 <= now_hour < 6):
     return render_template('registration/anger-mom.html')
   else:
-    return render_template("新規登録html画面")
+    return render_template('registration/signup.html')
 
-
-
-
-@app.route('/next_step_s')
-def show_signup():
-  return render_template('registration/signup.html')
 
 # 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
 @app.route('/process_signup', methods=['POST'])
@@ -84,14 +78,9 @@ def show_login():
   if (22 <= now_hour < 24) or (0 <= now_hour < 6):
     return render_template('registration/anger-mom.html')
   else:
-    return render_template("ログインhtml画面")
+    return render_template('registration/login.html')
 
 
-
-
-@app.route('/next_step_l')
-def show_login():
-  return render_template('registration/login.html')
 
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
 @app.route('/process_login', methods=['POST'])
