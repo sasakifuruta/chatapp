@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "../static/css/edit-group.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>グループ編集</title>
+  </head>
+
+  <body>
+    <header>
+      <!--ヘッダーを追加-->
+      <h2 class="header-top app-name">トモチャット</h2>
+      <!-- {{ プロフィール画像 }} -->
+      <!-- 人型アイコン アカウント画面に遷移 -->
+      <a href="#" class="avatar">
+        <i class="fa-solid fa-circle-user"></i>
+      </a>
+    </header>
+
+    <!--メインコンテンツ-->
+    <div class = "container-wrap">
+      <p class="page_title"> グループ編集</p>
+      <div class = "container">
+        <!--編集ボタン-->
+        <div class = "edit-button">
+          <i class="fa-solid fa-circle-user icon-lays-icon"></i>
+          <span class="icon_layers_text">編集する</span>
+        </div>
+        <input type = "text" value=""  placeholder="グループ名を入力してください" class = "group-input-text">
+        <div class = "button-container">
+          <button class = "btn-white-long">戻る</button>
+          <button class = "btn-black-long">作成する</button>
+        </div>
+        <div class = "del-btn-container">
+          <button class = "btn-black-long">削除する</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
