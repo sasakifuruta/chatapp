@@ -97,12 +97,12 @@ class dbConnect:
             
     
     @staticmethod
-    def getGroupById(gid):
+    def getGroupById(cid):
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
                 sql = "SELECT * FROM chat_groups WHERE id=%s;"
-                cur.execute(sql, (gid,))
+                cur.execute(sql, (cid,))
                 group = cur.fetchone()
                 return group
             except Exception as e:
@@ -152,12 +152,12 @@ class dbConnect:
     
     # グループ編集
     @staticmethod
-    def updateGroup(uid, newGroupName, newGroup_img, gid):
+    def updateGroup(uid, newGroupName, newGroup_img, cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
-            cur.execute(sql, (uid, newGroupName, newGroup_img, gid))
+            cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -170,12 +170,12 @@ class dbConnect:
     
     # グループ削除
     @staticmethod
-    def deleteGroup(gid):
+    def deleteGroup(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "DELETE FROM chat_groups WHERE id=%s;"
-            cur.execute(sql, (gid,))
+            cur.execute(sql, (cid,))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -208,12 +208,12 @@ class dbConnect:
     
     # メッセージ追加
     @staticmethod
-    def createMessage(uid, gid, content):
+    def createMessage(uid, cid, content):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO messages(uid, gid, content) VALUES(%s,%s,%s);"
-            cur.execute(sql, (uid, gid, content))
+            sql = "INSERT INTO messages(uid, cid, content) VALUES(%s,%s,%s);"
+            cur.execute(sql, (uid, cid, content))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
