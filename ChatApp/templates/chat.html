@@ -39,8 +39,7 @@
             </div>
             <!--ここまで中身-->
         </div>
-        <!-- {{ チャンネル名 }} -->
-        <h2 class="header-top">チャンネル名</h2>
+        <h2 class="header-top">{{ group_name.name }}</h2>
         <!-- {{ プロフィール画像 }} -->
         <!-- 人型アイコン -->
         <div class="avatar">
@@ -58,7 +57,7 @@
             <!-- 自分が送信したメッセージ -->
             <div class="msgs-area right">
                 <figure class="icon-img"><i class="user-avatar fa-solid fa-circle-user"></i>
-                    <figcaption class="icon-name">ユーザー名</figcaption>
+                    <figcaption class="icon-name">{{ user_name }}</figcaption>
                 </figure>
                 <div class="chatting">
                     <p class="chat-text">{{ message.content }}</p>
@@ -67,10 +66,11 @@
                 <div class="edit-chat-text">
                     <!-- 編集アイコンをクリックしたら出現するtextarea -->
                     <div class="edit-text">
-                        <form action="" method="post">
-                            <button type="submit" class="btn-delete"><i class="fa-solid fa-trash-can"></i> </button>
-                            <textarea name="update-message" id="">テキストを入力1</textarea>
-                            <button type="submit" class="btn-update"><i class="fa-solid fa-pencil"></i></button>
+                        <form action="/group/{{ cid }}" method="post">
+                            <button type="submit" class="btn-delete" name="action" value="delete"><i class="fa-solid fa-trash-can"></i></button>
+                            <textarea name="update-message" id="">{{ message.content }}</textarea>
+                            <input type="hidden" name="mid" value="{{ message.id }}">
+                            <button type="submit" class="btn-update" name="action" value="update"><i class="fa-solid fa-pencil"></i></button>
                         </form>
                     </div>
                 </div>
@@ -96,6 +96,7 @@
     <div class="send-msg">
         <form action="/post_message" method="post">
             <textarea type="text" name="message" id="" placeholder="Aa"></textarea>
+            <input type="hidden" name="cid" value="{{ cid }}">
             <button type="submit"><i class="send-msg-icon fa-solid fa-paper-plane"></i></button>
         </form>
     </div>
@@ -112,8 +113,8 @@
 
         // 編集アイコン（.js-edit-open）を押したらtextareaを表示
         const edits = document.querySelectorAll(".js-edit-open");
-        edits.forEach(function(edit){
-            edit.addEventListener('click', ()=>{
+        edits.forEach(function (edit) {
+            edit.addEventListener('click', () => {
                 const chatting = edit.previousElementSibling;
                 const editArea = edit.nextElementSibling;
 

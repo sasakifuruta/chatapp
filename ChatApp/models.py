@@ -192,8 +192,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            # テストのため、uid='970af84c-dd40-47ff-af23-282b72b7cca8'　（本来はuid=%s）
-            sql = "SELECT id,u.uid, user_name, content FROM messages AS m INNER JOIN users As u ON m.uid='970af84c-dd40-47ff-af23-282b72b7cca8' WHERE cid=%s;"
+            sql = "SELECT id,u.uid, user_name, content FROM messages AS m INNER JOIN users As u ON m.uid=%s WHERE cid=%s;"
             cur.execute(sql, (cid,))
             messages = cur.fetchall()
             return messages
@@ -230,7 +229,7 @@ class dbConnect:
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "UPDATE messages SET content=%s WHERE mid=%s;"
+                sql = "UPDATE messages SET content=%s WHERE id=%s;"
                 cur.execute(sql, (content, mid))
                 conn.commit()
             except Exception as e:
@@ -248,7 +247,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "DELETE FROM messages WHERE mid=%s;"
+            sql = "DELETE FROM messages WHERE id=%s;"
             cur.execute(sql, (mid,))
             conn.commit()
         except Exception as e:
