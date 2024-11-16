@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/home.css">
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>ホーム</title>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top app-name">トモチャット</h2>
+    </header>
+
+
+    <div class="container-wrap">
+        <div class="container">
+            <div class="icon-name">
+                <!-- もしprofile_imgがあれば {% if profile_img %} -->
+                <!-- <img src=""> -->
+                <!--なければデフォルトアイコンを表示 {% else %} -->
+                    <i class="default-icon fa-solid fa-circle-user"></i>
+                <!-- {% end if %} -->
+                <p class="user_name">{{ user_name }}</p>
+            </div>
+
+            <button class="btn-black-long"  onclick="location.href='/update_profile.html'">プローフィール編集</button>
+            <button class="btn-white-long"  onclick="location.href='/group.html'">グループ一覧</button>
+        </div>
+    </div>
+    
+</body>
+</html>
