@@ -97,12 +97,12 @@ class dbConnect:
             
     
     @staticmethod
-    def getGroupById(gid):
+    def getGroupById(cid):
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
                 sql = "SELECT * FROM chat_groups WHERE id=%s;"
-                cur.execute(sql, (gid,))
+                cur.execute(sql, (cid,))
                 group = cur.fetchone()
                 return group
             except Exception as e:
@@ -175,7 +175,7 @@ class dbConnect:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "DELETE FROM chat_groups WHERE id=%s;"
-            cur.execute(sql, (gid,))
+            cur.execute(sql, (cid,))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -188,12 +188,12 @@ class dbConnect:
     
     # メッセージを取得
     @staticmethod
-    def getMessageAll(gid):
+    def getMessageAll(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "SELECT id,u.uid, user_name, content FROM messages AS m INNER JOIN users As u ON m.uid=u.uid WHERE cid=%s;"
-            cur.execute(sql, (gid,))
+            cur.execute(sql, (cid,))
             messages = cur.fetchall()
             return messages
         except Exception as e:
@@ -207,12 +207,12 @@ class dbConnect:
     
     # メッセージ追加
     @staticmethod
-    def createMessage(uid, gid, content):
+    def createMessage(uid, cid, content):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "INSERT INTO messages(uid, cid, content) VALUES(%s,%s,%s);"
-            cur.execute(sql, (uid, gid, content))
+            cur.execute(sql, (uid, cid, content))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
