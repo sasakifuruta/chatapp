@@ -1,6 +1,8 @@
 # flask、必要なライブラリをインポート
-from flask import Flask, request, redirect, render_template, session, flash, abort
+from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
 from datetime import timedelta
+import datetime
+from zoneinfo import ZoneInfo
 import hashlib
 import uuid
 import re
@@ -13,6 +15,16 @@ app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex   
 app.permanent_session_lifetime = timedelta(days=30)
 
+# home.htmlにアクセスするためのエンドポイントの指定
+@app.route("/home")
+def home():
+    return render_template("home.html")
+
+# apptitle.htmlにアクセスするためのエンドポイントの指定
+@app.route("/apptitle")
+def apptitle():
+    return render_template("apptitle.html")
+
 
 # アカウント作成
 # アプリタイトル画面の新規登録ボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_s'とした）を押した際の処理を以下に実装。
@@ -20,10 +32,10 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 @app.route('/next_step_s')
 def show_signup():
-  now = datetime.datetime.now()
+  now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
   now_hour = now.hour
   if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-    return render_template('registration/anger-mom.html')
+    return render_template('anger-mon.html')
   else:
     return render_template('registration/signup.html')
 
@@ -62,9 +74,9 @@ def process_signup_form():
       dbConnect.createUser(uid, name, email, password)
       user_id = str(uid)
       session['uid'] = user_id
-      return redirect('/')
+      return redirect(url_for("home"))
 
-  return render_template("/registration/hoge.html")
+  return render_template("/registration/signup.html")
 
 
 # ログインページの表示
@@ -73,10 +85,10 @@ def process_signup_form():
 
 @app.route('/next_step_l')
 def show_login():
-  now = datetime.datetime.now()
+  now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
   now_hour = now.hour
   if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-    return render_template('registration/anger-mom.html')
+    return render_template('anger-mon.html')
   else:
     return render_template('registration/login.html')
 
@@ -104,37 +116,50 @@ def process_login_form():
         flash('パスワードが間違っています')
       else:
         session['uid'] = user["uid"]
-        return redirect('/') # '/'がホーム画面でいいか確認する
+        return redirect(url_for("home"))
   return render_template('registration/login.html')    
 
 
 # ログアウト
 # ハンバーガーメニューのログアウトボタンを押した際の処理。エンドポイントは'/logout'とした。
-# ログアウト後は優しい母モーダルへ返す？アプリタイトル画面へ戻す？
-@app.route('/logout')
+@app.route('/logout', methods=['POST']) # home.htmlのハンバーガーメニューにログアウトボタンのエンドポイントが記述されたら紐づける。
 def logout():
   session.clear()
-  return redirect('/next_step_l') # 優しい母画面に返す形でいいか？
+  return redirect(url_for("apptitle"))
+
+# # 退会
+# # login.htmlにアクセスするためのエンドポイントの指定。セッションが無効でログインページに返したい時は必要。
+# @app.route("/disactive")
+# def disactive():
+#     return render_template('registration/login.html')
+
+# 退会ページの表示
+@app.route('/') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
+def show_withdrawal():
+    return render_template('disactive.html')
 
 
-# 退会
-@app.route('/withdrawal')
+@app.route('/withdrawal', methods=['GET', 'POST'])
 def withdraw_account():
   if not session.get('uid'):
     flash('ログインしてください')
-    return redirect('ログインhtmlのエンドポイント')
+    # print("セッションにuidが存在しません")
+    return redirect('url_for("apptitle")')
   else:
     uid = session['uid']
     DB_user = dbConnect.getUser(uid)
     if DB_user != None:
       dbConnect.deactivateUser(uid)
       session.clear()
+      # print('退会完了です')
       flash('退会処理が完了しました。またいつでも遊びにきてね！')
-      return redirect('/"アプリタイトルhtml画面のエンドポイント"') # アプリタイトル画面のエンドポイントを確認
+      return redirect(url_for("apptitle"))
     else:
       flash('退会処理が失敗しました')
-      return redirect("アプリタイトルhtml画面のエンドポイント") # アプリタイトル画面に返す？
+      # print('退会失敗です')
+      return redirect('/withdrawal') # とりあえず退会画面にリダイレクト。
       # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
+  # return redirect('/withdrawal')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
