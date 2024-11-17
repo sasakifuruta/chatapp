@@ -125,26 +125,39 @@ def process_login_form():
 # チャットグループ一覧ページの表示
 @app.route('/')
 def index():
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/process_login')
-    else:
-        chat_groups = dbConnect.getGroupAll()
-        chat_groups.reverse()
+    # uid = session.get("uid")
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # if uid is None:
+    #     return redirect('/process_login')
+    # else:
+    chat_groups = dbConnect.getGroupAll()
+    chat_groups.reverse()
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('group.html',groups=chat_groups,)
 
+@app.route('/create_group')
+def create_group():
+    # uid = session.get("uid")
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # if uid is None:
+    #     return redirect('/process_login')
+    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
+    return render_template('create_group.html')
+
+
+
 #チャットグループの追加
-@app.route('/',methods=['POST'])
+@app.route('/create_group',methods=['POST'])
 def add_chat_group():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect('/login')
-    chat_group_name = request.form.get('chat_groupTitle')
-    chat_group =dbConnect.getChat_groupByName(chat_group_name)
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
+    chat_group_name = request.form.get('group_name')
+    chat_group =dbConnect.getGroupByName(chat_group_name)
+    group_img = None
     if chat_group == None:
-        chat_group_description = request.form.get('chat_groupDescription')
-        dbConnect.addChat_group(uid, chat_group_name, chat_group_description)
+        dbConnect.addGroup(uid, chat_group_name,group_img)
         return redirect('/')
     else:
         error = '既に同じ名前のチャットグループが存在しています'

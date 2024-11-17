@@ -15,7 +15,7 @@
 <body>
     <header>
         <!-- ドロワーメニューを追加する -->
-    
+
         <h2 class="header-top app-name">App Name</h2>
         <!-- {{ プロフィール画像 }} -->
         <!-- 人型アイコン　アカウント画面に遷移 -->
@@ -30,7 +30,7 @@
         <div class="container">
             <div class="groups">
 
-                 {% for group in groups  %}
+                {% for group in groups %}
                 <div class="group">
                     <div class="group-img">
                         <!-- グループ画像 -->
@@ -46,9 +46,9 @@
                         <p class="unread">1</p>
                     </div>
                 </div>
-                 {% endfor %}
+                {% endfor %}
 
-                 {% for group in groups  %}
+                {% for group in groups %}
                 <div class="group">
                     <div class="group-img">
                         <!-- グループ画像 -->
@@ -64,16 +64,20 @@
                         <p class="unread">1</p>
                     </div>
                 </div>
-                 {% endfor %}
+                {% endfor %}
 
             </div>
         </div>
 
         <div class="group-footer">
             <!-- ＋ボタン -->
-            <button class="btn-create-group" type="button" onclick="location.href='リンク先のURL'">
-                <i class="fa-solid fa-plus"></i>
-            </button>
+            <form action="/create_group" method="get">
+
+                <button class="btn-create-group" type="submit">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+
         </div>
     </div>
 </body>
