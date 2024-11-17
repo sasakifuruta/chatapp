@@ -14,24 +14,67 @@
 
   <body>
     <header>
-      <!--ヘッダーを追加-->
-      <h2 class="header-top app-name">トモチャット</h2>
-      <!-- {{ プロフィール画像 }} -->
-      <!-- 人型アイコン アカウント画面に遷移 -->
-      <a href="#" class="avatar">
-        <i class="fa-solid fa-circle-user"></i>
-      </a>
-    </header>
+      <!-- ハンバーガーメニュー -->
+    <div class="hamburger-menu">
+      <input type="checkbox" id="menu-btn-check">
+      <label for="menu-btn-check" class="menu-btn"><span></span></label>
+      <!--ここから中身-->
+      <div class="menu-content">
+          <ul>
+              <li>
+                  <a href="#">ホーム</a>
+              </li>
+              <li>
+                  <a href="#">グループ</a>
+              </li>
+              <li>
+                  <a href="#">アカウント</a>
+              </li>
+              <li>
+                  <a href="#">ログアウト</a>
+              </li>
+              <li>
+                  <a href="#">退会</a>
+              </li>
+          </ul>
+      </div>
+      <!--ここまで中身-->
+  </div>
+  <h2 class="header-top app-name">トモチャット</h2>
+  <!-- {{ プロフィール画像 }} -->
+  <!-- 人型アイコン　アカウント画面に遷移 -->
+  <a href="#" class="avatar">
+      <i class="fa-solid fa-circle-user">
+      </i>
+  </a>
+</header>
 
     <!--メインコンテンツ-->
     <div class = "container-wrap">
       <p class="page_title"> グループ編集</p>
       <div class = "container">
+
+
+
+
         <!--編集ボタン-->
-        <div class = "edit-button">
-          <i class="fa-solid fa-circle-user icon-lays-icon"></i>
-          <span class="icon_layers_text">編集する</span>
+        <div class="profile">
+          <input class="file_upload" id="file_upload" type="file" name="group_img"
+            accept="image/png, image/jpeg, image/png">
+          <label for="profile_img">
+            <!-- もしprofile_imgがあれば {% if group_img %} -->
+            <img id="jsPreview" src="">
+            <!--なければデフォルトアイコンを表示 {% else %} -->
+            <i id="default-icon" class="default-icon fa-solid fa-users">
+            </i>
+            <!-- {% end if %} -->
+          </label>
         </div>
+
+
+
+
+
         <input type = "text" value=""  placeholder="グループ名を入力してください" class = "group-input-text">
         <div class = "button-container">
           <button class = "btn-white-long">戻る</button>
@@ -42,5 +85,39 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <script>
+      // プロフィール画像ファイル選択時のプレビュー
+      defaultIcon = document.getElementById('default-icon');
+      jsPreview = document.getElementById("jsPreview");
+  
+  
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!jsPreview.getAttribute("src") || jsPreview.getAttribute("src") === "") {
+          defaultIcon.style.display = 'block';
+          jsPreview.style.display = 'none';
+        } else {
+          defaultIcon.style.display = 'none';
+          jsPreview.style.display = 'block';
+        }
+  
+        document.getElementById('file_upload').addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          console.log(file)
+          if (file) {
+            const fileReader = new FileReader();
+            fileReader.onload = (event) => {
+              jsPreview.src = event.target.result;
+              defaultIcon.style.display = 'none';
+              jsPreview.style.display = 'block';
+            }
+            fileReader.readAsDataURL(file);
+          }
+        });
+      });
+    </script>
   </body>
 </html>
