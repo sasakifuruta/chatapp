@@ -81,37 +81,37 @@ class dbConnect:
     # 全グループを取得
     @staticmethod
     def getGroupAll():
-            try:
-                conn = DB.getConnection()
-                cur = conn.cursor()
-                sql = "SELECT * FROM chat_groups;"
-                cur.execute(sql)
-                groups = cur.fetchall()
-                return groups
-            except Exception as e:
-                print(f'エラーが発生しています: {e}')
-                abort(500)
-            finally:
-                cur.close()
-                conn.close()
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM chat_groups;"
+            cur.execute(sql)
+            groups = cur.fetchall()
+            return groups
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
 
             
     
     @staticmethod
     def getGroupById(gid):
-            try:
-                conn = DB.getConnection()
-                cur = conn.cursor()
-                sql = "SELECT * FROM chat_groups WHERE id=%s;"
-                cur.execute(sql, (gid,))
-                group = cur.fetchone()
-                return group
-            except Exception as e:
-                print(f'エラーが発生しています: {e}')
-                abort(500)
-            finally:
-                cur.close()
-                conn.close()
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM chat_groups WHERE id=%s;"
+            cur.execute(sql, (gid,))
+            group = cur.fetchone()
+            return group
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
 
     
     
@@ -139,7 +139,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO chat_groups (uid, name, group_img) VALUES ('970af84c-dd40-47ff-af23-282b72b7cca8', %s, 'http://yahoo.co.jp/img.png');"
+            sql = "INSERT INTO chat_groups (uid, name, group_img) VALUES (%s, %s, %s);"
             cur.execute(sql, (uid, newGroupName, newGroup_img))
             conn.commit()
         except Exception as e:

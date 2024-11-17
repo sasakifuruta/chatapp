@@ -131,6 +131,7 @@ def index():
     #     return redirect('/process_login')
     # else:
     chat_groups = dbConnect.getGroupAll()
+    chat_groups = list(chat_groups)
     chat_groups.reverse()
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('group.html',groups=chat_groups,)
@@ -155,9 +156,9 @@ def add_chat_group():
     #     return redirect('/login')
     chat_group_name = request.form.get('group_name')
     chat_group =dbConnect.getGroupByName(chat_group_name)
-    group_img = None
+    group_img = "no_img"
     if chat_group == None:
-        dbConnect.addGroup(uid, chat_group_name,group_img)
+        dbConnect.addGroup(uid, chat_group_name, group_img)
         return redirect('/')
     else:
         error = '既に同じ名前のチャットグループが存在しています'
