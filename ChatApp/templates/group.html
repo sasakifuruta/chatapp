@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/group.css">
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>グループ</title>
+</head>
+
+<body>
+    <header>
+        <!-- ドロワーメニューを追加する -->
+    
+        <h2 class="header-top app-name">App Name</h2>
+        <!-- {{ プロフィール画像 }} -->
+        <!-- 人型アイコン　アカウント画面に遷移 -->
+        <a href="#" class="avatar">
+            <i class="fa-solid fa-circle-user">
+            </i>
+        </a>
+    </header>
+
+    <div class="container-wrap">
+        <p class="page_title">グループ一覧</p>
+        <div class="container">
+            <div class="groups">
+
+                 {% for group in groups  %}
+                <div class="group">
+                    <div class="group-img">
+                        <!-- グループ画像 -->
+                        <i class="group-icon fa-solid fa-people-group"></i>
+                        <!-- 画像右下に編集アイコン -->
+                        <i class="update-icon fa-solid fa-pencil"></i>
+                    </div>
+                    <!-- チャンネル名 -->
+                    <div class="group-name-wrap">
+                        <p class="group-name">お昼寝チャンネル
+                        </p>
+                        <!-- 未読件数があれば表示 -->
+                        <p class="unread">1</p>
+                    </div>
+                </div>
+                 {% endfor %}
+
+                 {% for group in groups  %}
+                <div class="group">
+                    <div class="group-img">
+                        <!-- グループ画像 -->
+                        <i class="group-icon fa-solid fa-people-group"></i>
+                        <!-- 画像右下に編集アイコン -->
+                        <i class="update-icon fa-solid fa-pencil"></i>
+                    </div>
+                    <!-- チャンネル名 -->
+                    <div class="group-name-wrap">
+                        <p class="group-name">お昼寝チャンネル
+                        </p>
+                        <!-- 未読件数があれば表示 -->
+                        <p class="unread">1</p>
+                    </div>
+                </div>
+                 {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="group-footer">
+            <!-- ＋ボタン -->
+            <button class="btn-create-group" type="button" onclick="location.href='リンク先のURL'">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -10,7 +10,6 @@ class dbConnect:
     @staticmethod
     def createUser(uid, name, email, password):
         try:
-            print('nao')
             conn = DB.getConnection()
             cur = conn.cursor()
             sql = "INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s);"
@@ -85,7 +84,7 @@ class dbConnect:
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "SELECT * FROM groups;"
+                sql = "SELECT * FROM chat_groups;"
                 cur.execute(sql)
                 groups = cur.fetchall()
                 return groups
@@ -103,7 +102,7 @@ class dbConnect:
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "SELECT * FROM groups WHERE id=%s;"
+                sql = "SELECT * FROM chat_groups WHERE id=%s;"
                 cur.execute(sql, (gid,))
                 group = cur.fetchone()
                 return group
@@ -121,7 +120,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "SELECT * FROM groups WHERE name=%s;"
+            sql = "SELECT * FROM chat_groups WHERE name=%s;"
             cur.execute(sql, (group_name,))
             group = cur.fetchone()
             return group
@@ -140,7 +139,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO groups (uid, name, img_url) VALUES (%s, %s, %s);"
+            sql = "INSERT INTO chat_groups (uid, name, img_url) VALUES (%s, %s, %s);"
             cur.execute(sql, (uid, newGroupName, newGroup_img))
             conn.commit()
         except Exception as e:
@@ -158,7 +157,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE groups SET uid=%s, name=%s, img_url=%s WHERE id=%s;"
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, img_url=%s WHERE id=%s;"
             cur.execute(sql, (uid, newGroupName, newGroup_img, gid))
             conn.commit()
         except Exception as e:
@@ -176,7 +175,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "DELETE FROM groups WHERE id=%s;"
+            sql = "DELETE FROM chat_groups WHERE id=%s;"
             cur.execute(sql, (gid,))
             conn.commit()
         except Exception as e:

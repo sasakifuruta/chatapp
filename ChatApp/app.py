@@ -94,47 +94,47 @@ def process_login_form():
   return render_template('registration/login.html')    
 
 
-# ログアウト
-# ハンバーガーメニューのログアウトボタンを押した際の処理。エンドポイントは'/logout'とした。
-# ログアウト後は優しい母モーダルへ返す？アプリタイトル画面へ戻す？
-@app.route('/logout')
-def logout():
-  session.clear()
-  return redirect('/next_step_l') # 優しい母画面に返す形でいいか？
+# # ログアウト
+# # ハンバーガーメニューのログアウトボタンを押した際の処理。エンドポイントは'/logout'とした。
+# # ログアウト後は優しい母モーダルへ返す？アプリタイトル画面へ戻す？
+# @app.route('/logout')
+# def logout():
+#   session.clear()
+#   return redirect('/next_step_l') # 優しい母画面に返す形でいいか？
 
 
-# 退会
-@app.route('/withdrawal')
-def withdraw_account():
-  if not session.get('uid'):
-    flash('ログインしてください')
-    return redirect('ログインhtmlのエンドポイント')
-  else:
-    uid = session['uid']
-    DB_user = dbConnect.getUser(uid)
-    if DB_user != None:
-      dbConnect.deactivateUser(uid)
-      session.clear()
-      flash('退会処理が完了しました。またいつでも遊びにきてね！')
-      return redirect('/"アプリタイトルhtml画面のエンドポイント"') # アプリタイトル画面のエンドポイントを確認
-    else:
-      flash('退会処理が失敗しました')
-      return redirect("アプリタイトルhtml画面のエンドポイント") # アプリタイトル画面に返す？
-      # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
+# # 退会
+# @app.route('/withdrawal')
+# def withdraw_account():
+#   if not session.get('uid'):
+#     flash('ログインしてください')
+#     return redirect('ログインhtmlのエンドポイント')
+#   else:
+#     uid = session['uid']
+#     DB_user = dbConnect.getUser(uid)
+#     if DB_user != None:
+#       dbConnect.deactivateUser(uid)
+#       session.clear()
+#       flash('退会処理が完了しました。またいつでも遊びにきてね！')
+#       return redirect('/"アプリタイトルhtml画面のエンドポイント"') # アプリタイトル画面のエンドポイントを確認
+#     else:
+#       flash('退会処理が失敗しました')
+#       return redirect("アプリタイトルhtml画面のエンドポイント") # アプリタイトル画面に返す？
+#       # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
 
 # チャットグループ一覧ページの表示
 @app.route('/')
 def index():
     uid = session.get("uid")
     if uid is None:
-        return redirect('/longin')
+        return redirect('/process_login')
     else:
-        chat_groups = dbConnect.getChat_groupsAll()
+        chat_groups = dbConnect.getGroupAll()
         chat_groups.reverse()
-    return render_template('index.html', chat_groups=chat_groups, uid=uid)
+    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
+    return render_template('group.html',groups=chat_groups,)
 
-
-# チャットグループの追加
+#チャットグループの追加
 @app.route('/',methods=['POST'])
 def add_chat_group():
     uid = session.get('uid')
@@ -151,50 +151,50 @@ def add_chat_group():
         return render_template('error/error.html', error_message=error)
 
 
-# チャットグループの更新
-@app.route('/update_chat_group', methods=['POST'])
-def update_chat_group():
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+# # チャットグループの更新
+# @app.route('/update_chat_group', methods=['POST'])
+# def update_chat_group():
+#     uid = session.get("uid")
+#     if uid is None:
+#         return redirect('/login')
 
-    cid = request.form.get('cid')
-    chat_group_name = request.form.get('chat_groupTitle')
-    chat_group_description = request.form.get('chat_groupDescription')
+#     cid = request.form.get('cid')
+#     chat_group_name = request.form.get('chat_groupTitle')
+#     chat_group_description = request.form.get('chat_groupDescription')
 
-    dbConnect.updateChat_group(uid, channel_name, channel_description, cid)
-    return redirect('/detail/{cid}'.format(cid = cid))
-
-
-# チャットグループの削除
-@app.route('/delete/<cid>')
-def delete_chat_group(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
-    else:
-        chat_group = dbConnect.getChat_groupById(cid)
-        if chat_group["uid"] != uid:
-            flash('チャットグループは作成者のみ削除可能です')
-            return redirect ('/')
-        else:
-            dbConnect.deleteChat_group(cid)
-            chat_groups = dbConnect.getChat_groupAll()
-            return redirect('/')
+#     dbConnect.updateChat_group(uid, channel_name, channel_description, cid)
+#     return redirect('/detail/{cid}'.format(cid = cid))
 
 
-# チャットグループ詳細ページの表示
-@app.route('/detail/<cid>')
-def detail(cid):
-    uid = session.get("uid")
-    if uid is None:
-        return redirect('/login')
+# # チャットグループの削除
+# @app.route('/delete/<cid>')
+# def delete_chat_group(cid):
+#     uid = session.get("uid")
+#     if uid is None:
+#         return redirect('/login')
+#     else:
+#         chat_group = dbConnect.getChat_groupById(cid)
+#         if chat_group["uid"] != uid:
+#             flash('チャットグループは作成者のみ削除可能です')
+#             return redirect ('/')
+#         else:
+#             dbConnect.deleteChat_group(cid)
+#             chat_groups = dbConnect.getChat_groupAll()
+#             return redirect('/')
 
-    cid = cid
-    chat_group = dbConnect.getChat_groupById(cid)
-    messages = dbConnect.getMessageAll(cid)
 
-    return render_template('detail.html', messages=messages, chat_group=chat_group, uid=uid)
+# # チャットグループ詳細ページの表示
+# @app.route('/detail/<cid>')
+# def detail(cid):
+#     uid = session.get("uid")
+#     if uid is None:
+#         return redirect('/login')
+
+#     cid = cid
+#     chat_group = dbConnect.getChat_groupById(cid)
+#     messages = dbConnect.getMessageAll(cid)
+
+#     return render_template('detail.html', messages=messages, chat_group=chat_group, uid=uid)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
