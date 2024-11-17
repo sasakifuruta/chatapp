@@ -53,7 +53,7 @@
     <div class="container-wrap">
         <p class="page_title"> グループ編集</p>
         <div class="container">
-
+            <form action="/update_chat_group" method="post">
 
 
 
@@ -67,22 +67,21 @@
                     <!--なければデフォルトアイコンを表示 {% else %} -->
                     <i id="default-icon" class="default-icon fa-solid fa-users">
                     </i>
-                    <!-- {% end if %} -->
+                    <!-- {% endif %} -->
                 </label>
             </div>
 
 
-
-
-
-            <input type="text" value="" placeholder="グループ名を入力してください" class="group-input-text">
-            <div class="button-container">
-                <button class="btn-white-long">戻る</button>
-                <button class="btn-black-long">作成する</button>
-            </div>
-            <div class="del-btn-container">
-                <button class="btn-black-long">削除する</button>
-            </div>
+                <input type="text" name="chat_groupTitle" value="" placeholder="グループ名を入力してください" class="group-input-text">
+                <!-- <input type="hidden" name="cid" value="{{ cid }}"> -->
+                <div class="button-container">
+                    <button class="btn-white-long">戻る</button>
+                    <button class="btn-black-long">作成する</button>
+                </div>
+                <div class="del-btn-container">
+                    <button class="btn-black-long">削除する</button>
+                </div>
+            </form>
         </div>
     </div>
 
