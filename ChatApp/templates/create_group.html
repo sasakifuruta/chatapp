@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/create-group.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>グループ作成</title>
+</head>
+
+<body>
+    <header>
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top app-name">App Name</h2>
+        <!-- {{ プロフィール画像 }} -->
+        <!-- 人型アイコン　アカウント画面に遷移 -->
+        <a href="#" class="avatar">
+            <i class="fa-solid fa-circle-user">
+            </i>
+        </a>
+    </header>
+
+    <!--メインコンテンツ-->
+    <div class="container-wrap">
+        <p class="page_title"> グループ作成</p>
+        <div class="container">
+            <form action="" method="post">
+                <!--編集ボタン-->
+                <div class="profile">
+                    <input class="file_upload" id="file_upload" type="file" name="group_img"
+                        accept="image/png, image/jpeg, image/png">
+                    <label for="profile_img">
+                        <!-- もしprofile_imgがあれば {% if group_img %} -->
+                        <img id="jsPreview" src="">
+                        <!--なければデフォルトアイコンを表示 {% else %} -->
+                        <i id="default-icon" class="default-icon fa-solid fa-users">
+                        </i>
+                        <!-- {% end if %} -->
+                    </label>
+                </div>
+
+                <input name="group_name" type="text" value="" placeholder="グループ名を入力してください" class="group-input-text">
+                <div class="button-container">
+                    <button class="btn-white-long" onclick="history.back()">戻る</button>
+                    <button type="submit" class="btn-black-long">作成する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // プロフィール画像ファイル選択時のプレビュー
+        defaultIcon = document.getElementById('default-icon');
+        jsPreview = document.getElementById("jsPreview");
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (!jsPreview.getAttribute("src") || jsPreview.getAttribute("src") === "") {
+                defaultIcon.style.display = 'block';
+                jsPreview.style.display = 'none';
+            } else {
+                defaultIcon.style.display = 'none';
+                jsPreview.style.display = 'block';
+            }
+
+            document.getElementById('file_upload').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                console.log(file)
+                if (file) {
+                    const fileReader = new FileReader();
+                    fileReader.onload = (event) => {
+                        jsPreview.src = event.target.result;
+                        defaultIcon.style.display = 'none';
+                        jsPreview.style.display = 'block';
+                    }
+                    fileReader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
