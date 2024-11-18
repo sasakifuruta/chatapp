@@ -22,7 +22,7 @@ CREATE TABLE chat_groups (
     id INT AUTO_INCREMENT PRIMARY KEY,                            
     uid VARCHAR(255) REFERENCES users(uid),           
     name VARCHAR(255) UNIQUE NOT NULL,                
-    chat_group_img TEXT                               
+    group_img TEXT                               
 );
 
 

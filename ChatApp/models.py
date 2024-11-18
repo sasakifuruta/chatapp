@@ -44,12 +44,12 @@ class dbConnect:
     
     # アカウント・プロフィール画像編集
     @staticmethod
-    def updateUser(name, email, password, profile_url, uid):
+    def updateUser(name, email, password, profile_img, uid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_url=%s WHERE uid=%s;"
-            cur.execute(sql, (name, email, password, profile_url, uid))
+            sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_img=%s WHERE uid=%s;"
+            cur.execute(sql, (name, email, password, profile_img, uid))
             conn.commit()
         except Exception as e:
             print(f'エラーが発生しています: {e}')
@@ -138,7 +138,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "INSERT INTO chat_groups (uid, name, img_url) VALUES (%s, %s, %s);"
+            sql = "INSERT INTO chat_groups (uid, name, group_img) VALUES (%s, %s, %s);"
             cur.execute(sql, (uid, newGroupName, newGroup_img))
             conn.commit()
         except Exception as e:
@@ -156,7 +156,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE chat_groups SET uid=%s, name=%s, img_url=%s WHERE id=%s;"
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
             cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:

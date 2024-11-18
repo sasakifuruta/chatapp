@@ -45,6 +45,15 @@
         </div>
         <h2 class="header-top app-name">トモチャット</h2>
     </header>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
 
     <div class="container-wrap">

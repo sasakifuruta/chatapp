@@ -127,11 +127,11 @@ def logout():
   session.clear()
   return redirect(url_for("apptitle"))
 
-# # 退会
-# # login.htmlにアクセスするためのエンドポイントの指定。セッションが無効でログインページに返したい時は必要。
-# @app.route("/disactive")
-# def disactive():
-#     return render_template('registration/login.html')
+# 退会
+# login.htmlにアクセスするためのエンドポイントの指定。セッションが無効でログインページに返したい時は必要。
+@app.route("/disactive")
+def disactive():
+    return render_template('registration/login.html')
 
 # 退会ページの表示
 @app.route('/') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
@@ -144,7 +144,7 @@ def withdraw_account():
   if not session.get('uid'):
     flash('ログインしてください')
     # print("セッションにuidが存在しません")
-    return redirect('url_for("apptitle")')
+    return redirect(url_for("apptitle"))
   else:
     uid = session['uid']
     DB_user = dbConnect.getUser(uid)
