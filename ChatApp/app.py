@@ -125,14 +125,14 @@ def process_login_form():
 # チャットグループ一覧ページの表示
 @app.route('/')
 def index():
-    # uid = session.get("uid")
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    # if uid is None:
-    #     return redirect('/process_login')
-    # else:
-    chat_groups = dbConnect.getGroupAll()
-    chat_groups = list(chat_groups)
-    chat_groups.reverse()
+    uid = session.get("uid")
+    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    if uid is None:
+        return redirect('/process_login')
+    else:
+      chat_groups = dbConnect.getGroupAll()
+      chat_groups = list(chat_groups)
+      chat_groups.reverse()
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('group.html',groups=chat_groups,)
 
@@ -182,8 +182,8 @@ def update_chat_group():
     # if uid is None:
     #     return redirect('/login')
 
-    # cid = request.form.get('cid')
-    cid= 1
+    cid = request.form.get('cid')
+    # cid= 1
     group_img= "noimg"
     chat_group_name = request.form.get('chat_groupTitle')
 

@@ -14,9 +14,33 @@
 
 <body>
     <header>
-        <!-- ドロワーメニューを追加する -->
-
-        <h2 class="header-top app-name">App Name</h2>
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top app-name">トモチャット</h2>
         <!-- {{ プロフィール画像 }} -->
         <!-- 人型アイコン　アカウント画面に遷移 -->
         <a href="#" class="avatar">
@@ -32,14 +56,13 @@
 
                 {% for group in groups %}
                 <div class="group">
-                    <div class="group-img">
-                        <!-- グループ画像 -->
-                        <i class="group-icon fa-solid fa-people-group"></i>
-                        <!-- 画像右下に編集アイコン -->
-                        <form action="/edit_group" method="get">
 
-                            <button class="btn-create-group" type="submit">
-                                <i class="update-icon fa-solid fa-pencil"></i>
+                    <div class="group-img">
+                        <form action="/edit_group" method="get">
+                            <button class="btn-edit-group" type="submit">
+                                <input type="hidden" name="cid">
+                                <i class="group-icon fa-solid fa-people-group"></i>
+                                <!-- 画像右下に編集アイコン -->
                             </button>
                         </form>
                     </div>
@@ -47,8 +70,6 @@
                     <div class="group-name-wrap">
                         <p class="group-name">{{ group.name }}
                         </p>
-                        <!-- 未読件数があれば表示 -->
-                        <p class="unread">1</p>
                     </div>
                 </div>
                 {% endfor %}

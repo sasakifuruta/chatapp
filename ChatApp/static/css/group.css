@@ -10,29 +10,22 @@
     margin-bottom: 50px;
 }
 
-/* グループアイコン＋編集アイコン */
-.group-img {
-    text-align: center; 
-    position: relative;
+/* グループアイコン */
+.btn-edit-group {
+    background: none;
+    border: none;
 }
 
 /* グループアイコン */
 .group-icon {
-    font-size: 2.5em;
+    font-size: 3.5em;
     padding: 10px 0 0;
     color: #2b5a56;
     border: solid 1px #2b5a56;
     border-radius: 50%;
 }
 
-/* 編集アイコン */
-.update-icon {
-    position: absolute;
-    bottom: 0;
-    color: #2b5a56;
-}
-
-/* グループ名＋未読件数 */
+/* グループ名 */
 .group-name-wrap {
     width: 80%;
     border-bottom: solid 1px #000000;
@@ -40,17 +33,7 @@
     justify-content: space-between;
     align-items: end;
     font-size: 1.3em;
-    margin-left: 35px;
-}
-
-/* 未読件数 */
-.unread {
-    background-color: #FF4D00;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    line-height: 38px;
-    text-align: center;
+    margin-left: 10px;
 }
 
 /* ＋ボタンをページ下に固定 */
