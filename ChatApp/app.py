@@ -58,7 +58,6 @@ def process_signup_form():
             user_id = str(uid)
             session['uid'] = user_id
             return redirect('/')
-
     return render_template("/registration/hoge.html")
 
 
