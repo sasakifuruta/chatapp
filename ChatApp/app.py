@@ -12,13 +12,18 @@ from models import dbConnect
 
 # セッションの内容やflashメッセージを暗号化、セッション有効期間を設定
 app = Flask(__name__)
-app.secret_key = uuid.uuid4().hex   
+app.secret_key = uuid.uuid4().hex
 app.permanent_session_lifetime = timedelta(days=30)
+
+# ============================
+# 認証機能
+# ============================
 
 # home.htmlにアクセスするためのエンドポイントの指定
 @app.route("/home")
 def home():
     return render_template("home.html")
+
 
 # apptitle.htmlにアクセスするためのエンドポイントの指定
 @app.route("/apptitle")
@@ -29,7 +34,6 @@ def apptitle():
 # アカウント作成
 # アプリタイトル画面の新規登録ボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_s'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-
 @app.route('/next_step_s')
 def show_signup():
   now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
@@ -44,45 +48,43 @@ def show_signup():
 @app.route('/process_signup', methods=['POST'])
 # 登録フォームに入力された値を変数に格納
 def process_signup_form():
-  name = request.form.get('user_name')
-  email = request.form.get('email')
-  password1 = request.form.get('password')
-  password2 = request.form.get('password_confirm')
+    name = request.form.get('user_name')
+    email = request.form.get('email')
+    password1 = request.form.get('password')
+    password2 = request.form.get('password_confirm')
 
-  # mailのパターン認識(バリデーション)
-  regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    # mailのパターン認識(バリデーション)
+    regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
-  # if:ユーザーが入力した内容に対しての条件分岐
-  if name == '' or email == '' or password1 == '' or password2 == '':
-    flash('入力されていない項目があります')
-  elif not re.match(regex, email):
-    flash('メールアドレスの形式が正しくありません')
-  elif password1 != password2:
-    flash('二つのパスワードの値が一致していません')
-  # elif パスワードの強度判定
-  else:
-    # PWをハッシュ化。まだ脆弱性あり。
-    uid = uuid.uuid4()
-    password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
-    # emailをキーにDBを検索
-    DBuser = dbConnect.getUser(email)
-    # DBに登録済みの場合
-    if DBuser != None:
-      flash('すでに登録されているようです')
-    # 新規ユーザーとして登録
+    # if:ユーザーが入力した内容に対しての条件分岐
+    if name == '' or email == '' or password1 == '' or password2 == '':
+      flash('入力されていない項目があります')
+    elif not re.match(regex, email):
+      flash('メールアドレスの形式が正しくありません')
+    elif password1 != password2:
+      flash('二つのパスワードの値が一致していません')
+    # elif パスワードの強度判定
     else:
-      dbConnect.createUser(uid, name, email, password)
-      user_id = str(uid)
-      session['uid'] = user_id
-      return redirect(url_for("home"))
-
-  return render_template("/registration/signup.html")
+      # PWをハッシュ化。まだ脆弱性あり。
+      uid = uuid.uuid4()
+      password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
+      # emailをキーにDBを検索
+      DBuser = dbConnect.getUser(email)
+      # DBに登録済みの場合
+      if DBuser != None:
+        flash('すでに登録されているようです')
+      # 新規ユーザーとして登録
+      else:
+        dbConnect.createUser(uid, name, email, password)
+        user_id = str(uid)
+        session['uid'] = user_id
+        return redirect(url_for("home"))
+    return render_template("/registration/signup.html")
 
 
 # ログインページの表示
 # アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-
 @app.route('/next_step_l', methods=['POST'])
 def show_login():
   now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
@@ -93,31 +95,30 @@ def show_login():
     return render_template('registration/login.html')
 
 
-
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
 @app.route('/process_login', methods=['POST'])
 # 登録フォームに入力された値を変数に格納
 def process_login_form():
-  email = request.form.get('email')
-  password = request.form.get('password')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
   # 入力漏れの確認
-  if email == '' or password == '':
-    flash('入力されていない項目があります')
-  else:
-    # DBからemailをキーに情報を取得
-    user = dbConnect.getUser(email)
-    if user == None:
-      flash('このユーザーは登録されていません')
+    if email == '' or password == '':
+      flash('入力されていない項目があります')
     else:
-      # 入力されたPWをハッシュ化し、DBから取得した情報と照合
-      hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-      if hashPassword != user["password"]:
-        flash('パスワードが間違っています')
+      # DBからemailをキーに情報を取得
+      user = dbConnect.getUser(email)
+      if user == None:
+        flash('このユーザーは登録されていません')
       else:
-        session['uid'] = user["uid"]
-        return redirect(url_for("home"))
-  return render_template('registration/login.html')    
+        # 入力されたPWをハッシュ化し、DBから取得した情報と照合
+        hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        if hashPassword != user["password"]:
+          flash('パスワードが間違っています')
+        else:
+          session['uid'] = user["uid"]
+          return redirect(url_for("home"))
+    return render_template('registration/login.html')    
 
 
 # ログアウト
@@ -170,6 +171,107 @@ def withdraw_account():
 # 登録成功したらhomeにリダイレクト？
 
 
+
+# ============================
+# チャットグループ機能
+# ============================
+
+# チャットグループ一覧ページの表示
+@app.route('/groups')
+def index():
+    uid = session.get("uid")
+    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    if uid is None:
+        return redirect('/process_login')
+    else:
+        chat_groups = dbConnect.getGroupAll()
+        chat_groups = list(chat_groups)
+        chat_groups.reverse()
+    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
+    return render_template('group.html', groups=chat_groups,)
+
+
+# チャットグループの追加画面の表示
+@app.route('/create_group')
+def create_group():
+    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    uid = session.get("uid")
+    
+    if uid is None:
+        return redirect('/process_login')
+    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
+    return render_template('create_group.html')
+
+
+# チャットグループの追加
+@app.route('/create_group', methods=['POST'])
+def add_chat_group():
+    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    uid = session.get('uid')
+    if uid is None:
+        return redirect('/login')
+    chat_group_name = request.form.get('group_name')
+    chat_group = dbConnect.getGroupByName(chat_group_name)
+    group_img = "no_img"
+    if chat_group == None:
+        dbConnect.addGroup(uid, chat_group_name, group_img)
+        return redirect('/groups')
+    else:
+        error = '既に同じ名前のチャットグループが存在しています'
+        return render_template('error/error.html', error_message=error)
+
+
+# チャットグループ編集画面の表示
+@app.route('/edit_group/<cid>')
+def edit_group(cid):
+  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  uid = session.get("uid")
+  if uid is None:
+    return redirect('/process_login')
+
+  group_name = dbConnect.getGroupById(cid)
+  # return render_template('group.html', chat_groups=chat_groups, uid=uid)
+  return render_template('edit_group.html', cid=cid, group_name=group_name)
+
+
+# チャットグループ名の更新
+@app.route('/update_chat_group', methods=['POST'])
+def update_chat_group():
+  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  # cid= 1
+  group_img = "noimg"
+  uid = session.get("uid")  
+  if uid is None:
+      return redirect('/login')
+
+  cid = request.form.get('cid')
+  chat_group_name = request.form.get('chat_groupTitle')
+
+  dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
+  return redirect('/groups')
+
+
+# チャットグループの削除
+@app.route('/update_chat_group', methods=['POST'])
+def delete_chat_group():
+  uid = session.get("uid")
+  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  # cid= 1
+  if uid is None:
+      return redirect('/login')
+  else:
+    cid = request.form.get('cid')
+    chat_group = dbConnect.getGroupById(cid)
+  if chat_group["uid"] != uid:
+    flash('チャットグループは作成者のみ削除可能です')
+    return redirect('/')
+  else:
+    dbConnect.deleteGroup(cid)
+  return redirect('/groups')
+
+
+
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
-

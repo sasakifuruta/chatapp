@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/group.css">
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>グループ</title>
+</head>
+
+<body>
+    <header>
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top app-name">トモチャット</h2>
+        <!-- {{ プロフィール画像 }} -->
+        <!-- 人型アイコン　アカウント画面に遷移 -->
+        <a href="#" class="avatar">
+            <i class="fa-solid fa-circle-user">
+            </i>
+        </a>
+    </header>
+
+    <div class="container-wrap">
+        <p class="page_title">グループ一覧</p>
+        <div class="container">
+            <div class="groups">
+
+                {% for group in groups %}
+                <div class="group">
+
+                    <div class="group-img">
+                        <form action="/edit_group" method="get">
+                            <button class="btn-edit-group" type="submit">
+                                <input type="hidden" name="cid" value="{{ cid }}">
+                                <i class="group-icon fa-solid fa-people-group"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <!-- チャンネル名 -->
+                    <div class="group-name-wrap">
+                        <p class="group-name">{{ group.name }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+
+            </div>
+        </div>
+
+        <div class="group-footer">
+            <!-- ＋ボタン -->
+            <form action="/create_group" method="get">
+
+                <button class="btn-create-group" type="submit">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>
