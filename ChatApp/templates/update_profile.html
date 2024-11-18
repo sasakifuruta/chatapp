@@ -63,22 +63,22 @@
 
                 <div class="input-area">
                     <label for="user_name">ユーザー名</label>
-                    <input type="text" name="user_name" placeholder="{{ user_name }}">
+                    <input type="text" name="user_name" value="{{ user_name }}">
                 </div>
 
                 <div class="input-area">
                     <label for="email">メールアドレス</label>
-                    <input type="email" name="email" placeholder="{{ email }}">
+                    <input type="email" name="email" value="{{ email }}">
                 </div>
 
                 <div class="input-area">
                     <label for="password">パスワード</label>
-                    <input type="password" name="password" placeholder= "{{ '●' * password_length }}">
+                    <input type="password" name="password" value= "{{ '●' * password_length }}">
                 </div>
 
                 <div class="input-area">
                     <label for="password_confirm">パスワード確認</label>
-                    <input type="password" name="password_confirm" placeholder="{{ '●' * password_length }}">
+                    <input type="password" name="password_confirm" value="{{ '●' * password_length }}">
                 </div>
 
                 <div class="buttons">

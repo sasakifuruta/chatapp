@@ -85,7 +85,7 @@ def process_signup_form():
 # ログインページの表示
 # アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-@app.route('/next_step_l', methods=['POST'])
+@app.route('/next_step_l',)
 def show_login():
   now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
   now_hour = now.hour
