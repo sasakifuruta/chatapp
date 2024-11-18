@@ -101,6 +101,8 @@ def show_login():
 def process_login_form():
     email = request.form.get('email')
     password = request.form.get('password')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
   # 入力漏れの確認
     if email == '' or password == '':
@@ -271,7 +273,74 @@ def delete_chat_group():
 
 
 
+# ======================
+# メッセージ機能
+# =======================
 
+# チャット画面表示
+@app.route('/group/<cid>')
+def message(cid):
+    uid = session.get('uid')
+    # uid  = '970af84c-dd40-47ff-af23-282b72b7cca8' # テスト用
+    DB_user = dbConnect.getUser(uid)
+    if DB_user is None:
+        return redirect('/login')
+
+    group_name = dbConnect.getGroupById(cid)
+    messages = dbConnect.getMessageAll(cid)
+    return render_template('chat.html', user_name=DB_user, messages=messages, group_name=group_name, cid=cid)
+
+
+# メッセージの投稿
+@app.route('/post_message', methods=['POST'])
+def add_message():
+    uid = session.get('uid')
+    DB_user = dbConnect.getUser(uid)
+    if DB_user is None:
+        return redirect('/login')
+
+    message = request.form.get('message')
+    cid = request.form.get('cid')
+    if message:
+        dbConnect.createMessage(uid, cid, message)
+    return redirect(f'/group/{cid}')
+
+
+# メッセージの更新と削除
+@app.route('/group/<cid>', methods=['POST'])
+def update_message(cid):
+    uid = session.get('uid')
+    DB_user = dbConnect.getUser(uid)
+    if DB_user is None:
+        return redirect('/login')
+
+    action = request.form.get('action')
+    mid = request.form.get('mid')
+
+    # 更新
+    if action == 'update':
+        content = request.form.get('update-message')
+        if mid and content:
+            dbConnect.updateMessage(content, mid)
+
+    # 削除
+    elif action == 'delete':
+        if mid:
+            dbConnect.deleteMessage(mid)
+    return redirect(f'/group/{cid}')
+
+
+
+
+# # エラーページの表示
+# @app.errorhandler(404)
+# def show_error404(error):
+#     return render_template('error/404.html'),404
+
+
+# @app.errorhandler(500)
+# def show_error500(error):
+#     return render_template('error/500.html'),500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

@@ -41,16 +41,12 @@ class dbConnect:
             conn.close()
 
     
-    
     # アカウント・プロフィール画像編集
     @staticmethod
-    def updateUser(name, email, password, profile_img, uid):
     def updateUser(name, email, password, profile_img, uid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_img=%s WHERE uid=%s;"
-            cur.execute(sql, (name, email, password, profile_img, uid))
             sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_img=%s WHERE uid=%s;"
             cur.execute(sql, (name, email, password, profile_img, uid))
             conn.commit()
@@ -79,7 +75,6 @@ class dbConnect:
             conn.close()
 
 
-
     # 全グループを取得
     @staticmethod
     def getGroupAll():
@@ -97,7 +92,6 @@ class dbConnect:
             cur.close()
             conn.close()
 
-            
     
     @staticmethod
     def getGroupById(cid):
@@ -116,7 +110,6 @@ class dbConnect:
             conn.close()
 
     
-    
     @staticmethod
     def getGroupByName(group_name):
         try:
@@ -133,7 +126,6 @@ class dbConnect:
             cur.close()
             conn.close()
 
-            
     
     # グループ追加
     @staticmethod
@@ -152,14 +144,13 @@ class dbConnect:
             conn.close()
 
 
-    
     # グループ編集
     @staticmethod
     def updateGroup(uid, newGroupName, newGroup_img, cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
             cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:
@@ -170,14 +161,13 @@ class dbConnect:
             conn.close()
 
 
-    
     # グループ削除
     @staticmethod
     def deleteGroup(cid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "DELETE FROM groups WHERE id=%s;"
+            sql = "DELETE FROM chat_groups WHERE id=%s;"
             cur.execute(sql, (cid,))
             conn.commit()
         except Exception as e:
@@ -186,7 +176,6 @@ class dbConnect:
         finally:
             cur.close()
             conn.close()
-
 
     
     # メッセージを取得
@@ -207,7 +196,6 @@ class dbConnect:
             conn.close()
 
 
-    
     # メッセージ追加
     @staticmethod
     def createMessage(uid, cid, content):
@@ -225,14 +213,13 @@ class dbConnect:
             conn.close()
 
 
-    
     # メッセージ更新
     @staticmethod
     def updateMessage(content, mid):
             try:
                 conn = DB.getConnection()
                 cur = conn.cursor()
-                sql = "UPDATE messages SET content=%s WHERE mid=%s;"
+                sql = "UPDATE messages SET content=%s WHERE id=%s;"
                 cur.execute(sql, (content, mid))
                 conn.commit()
             except Exception as e:
@@ -242,7 +229,6 @@ class dbConnect:
                 cur.close()
                 conn.close()
 
-
     
     # メッセージ削除
     @staticmethod
@@ -250,7 +236,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "DELETE FROM messages WHERE mid=%s;"
+            sql = "DELETE FROM messages WHERE id=%s;"
             cur.execute(sql, (mid,))
             conn.commit()
         except Exception as e:
