@@ -161,6 +161,15 @@ def withdraw_account():
       # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
   # return redirect('/withdrawal')
 
+
+# アカウント変更画面の表示
+# テンプレートに表示するもの: user_name, email, password_length = len(password)
+
+
+# アカウント変更
+# 登録成功したらhomeにリダイレクト？
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
 

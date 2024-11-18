@@ -41,7 +41,7 @@
             </div>
             <!--ここまで中身-->
         </div>
-        <h2 class="header-top app-name">App Name</h2>
+        <h2 class="header-top app-name">トモチャット</h2>
     </header>
 
 
@@ -63,22 +63,22 @@
 
                 <div class="input-area">
                     <label for="user_name">ユーザー名</label>
-                    <input type="text" name="user_name" placeholder="{{ 登録ずみのuser_name }}">
+                    <input type="text" name="user_name" placeholder="{{ user_name }}">
                 </div>
 
                 <div class="input-area">
                     <label for="email">メールアドレス</label>
-                    <input type="email" name="email" placeholder="{{ 登録済みのメールアドレス }}">
+                    <input type="email" name="email" placeholder="{{ email }}">
                 </div>
 
                 <div class="input-area">
                     <label for="password">パスワード</label>
-                    <input type="password" name="password" placeholder="{{ ●*登録済みのパスワードの桁数 }}">
+                    <input type="password" name="password" placeholder= "{{ '●' * password_length }}">
                 </div>
 
                 <div class="input-area">
                     <label for="password_confirm">パスワード確認</label>
-                    <input type="password" name="password_confirm" placeholder="{{ {{ ●*登録済みのパスワードの桁数 }} }}">
+                    <input type="password" name="password_confirm" placeholder="{{ '●' * password_length }}">
                 </div>
 
                 <div class="buttons">

@@ -23,21 +23,19 @@
             <div class="menu-content">
                 <ul>
                     <li>
-                        <a href="#">ホーム</a>
+                        <a href="{{ url_for('home') }}">ホーム</a>
                     </li>
                     <li>
-                        <a href="#">グループ</a>
+                        <a href="{{ url_for('group') }}">グループ</a>
                     </li>
                     <li>
-                        <a href="#">アカウント</a>
+                        <a href="{{ url_for('prifile') }}">アカウント</a>
                     </li>
                     <li>
-                        <form action="/logout" method="post">
-                            <button type="submit">ログアウト</button>
-                        </form>
+                        <a href="{{ url_for('logout') }}">ログアウト</a>
                     </li>
                     <li>
-                        <a href="#">退会</a>
+                        <a href="{{ url_for('/') }}">退会</a>
                     </li>
                 </ul>
             </div>
@@ -45,16 +43,18 @@
         </div>
         <h2 class="header-top app-name">トモチャット</h2>
     </header>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
 
+    <!-- flashメッセージ始まり -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <!-- flashメッセージ終わり -->
 
     <div class="container-wrap">
         <div class="container">
