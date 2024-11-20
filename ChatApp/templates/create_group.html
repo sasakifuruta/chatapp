@@ -53,18 +53,15 @@
     <div class="container-wrap">
         <p class="page_title"> グループ作成</p>
         <div class="container">
-            <form action="/create_group" method="post">
+            <form action="/create_group" method="post" enctype="multipart/form-data">
                 <!--編集ボタン-->
                 <div class="profile">
                     <input class="file_upload" id="file_upload" type="file" name="group_img"
                         accept="image/png, image/jpeg, image/png">
                     <label for="profile_img">
-                        <!-- もしprofile_imgがあれば {% if group_img %} -->
                         <img id="jsPreview" src="">
-                        <!--なければデフォルトアイコンを表示 {% else %} -->
-                        <i id="default-icon" class="default-icon fa-solid fa-users">
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group">
                         </i>
-                        <!-- {% endif %} -->
                     </label>
                 </div>
 

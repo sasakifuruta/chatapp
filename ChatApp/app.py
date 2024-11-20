@@ -1,11 +1,14 @@
 # flask、必要なライブラリをインポート
 from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
 from datetime import timedelta
+from werkzeug.utils import secure_filename
 import datetime
 from zoneinfo import ZoneInfo
 import hashlib
 import uuid
 import re
+import os
+
 
 # models.pyからインポート
 from models import dbConnect
@@ -169,6 +172,21 @@ def withdraw_account():
 # テンプレートに表示するもの: user_name, email, password_length = len(password)
 
 
+# グループ画像をDBに保存する関数
+def profile_img_save():
+  # 画像の保存先ディレクトリ
+  PROFILE_IMG_FOLDER = 'static/img/profile_img'
+  app.config[PROFILE_IMG_FOLDER] = PROFILE_IMG_FOLDER
+  if 'profile_img' in request.files:
+    file = request.files['profile_img']
+    if file:
+      # 危険な文字を削除(サニタイズ処理)
+      filename = secure_filename(file.filename)
+      file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
+      profile_img = f"img/profile_img/{filename}"
+  return profile_img
+
+
 # アカウント変更
 # 登録成功したらhomeにリダイレクト？
 
@@ -181,14 +199,14 @@ def withdraw_account():
 # チャットグループ一覧ページの表示
 @app.route('/groups')
 def index():
-    uid = session.get("uid")
-    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    if uid is None:
-        return redirect('/process_login')
-    else:
-        chat_groups = dbConnect.getGroupAll()
-        chat_groups = list(chat_groups)
-        chat_groups.reverse()
+    # uid = session.get("uid")
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # if uid is None:
+    #     return redirect('/process_login')
+    # else:
+    chat_groups = dbConnect.getGroupAll() 
+    chat_groups = list(chat_groups)
+    chat_groups.reverse()
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('group.html', groups=chat_groups,)
 
@@ -196,25 +214,58 @@ def index():
 # チャットグループの追加画面の表示
 @app.route('/create_group')
 def create_group():
-    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    uid = session.get("uid")
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # uid = session.get("uid")
     
-    if uid is None:
-        return redirect('/process_login')
+    # if uid is None:
+    #     return redirect('/process_login')
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('create_group.html')
 
 
 # チャットグループの追加
+# @app.route('/create_group', methods=['POST'])
+# def add_chat_group():
+#     # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect('/login')
+#     chat_group_name = request.form.get('group_name')
+#     chat_group = dbConnect.getGroupByName(chat_group_name)
+#     group_img = "no_img"
+#     if chat_group == None:
+#         dbConnect.addGroup(uid, chat_group_name, group_img)
+#         return redirect('/groups')
+#     else:
+#         error = '既に同じ名前のチャットグループが存在しています'
+#         return render_template('error/error.html', error_message=error)
+
+
+# グループ画像をDBに保存する関数
+def group_img_save():
+  # 画像の保存先ディレクトリ
+  GROUP_IMG_FOLDER = 'static/img/group_img'
+  app.config[GROUP_IMG_FOLDER] = GROUP_IMG_FOLDER
+  if 'group_img' in request.files:
+    file = request.files['group_img']
+    if file:
+      # 危険な文字を削除(サニタイズ処理)
+      filename = secure_filename(file.filename)
+      file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
+      group_img = f"img/group_img/{filename}"
+  return group_img
+
+
+# チャットグループの追加
 @app.route('/create_group', methods=['POST'])
 def add_chat_group():
-    # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    uid = session.get('uid')
-    if uid is None:
-        return redirect('/login')
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    # uid = session.get('uid')
+    # if uid is None:
+    #     return redirect('/login')
     chat_group_name = request.form.get('group_name')
     chat_group = dbConnect.getGroupByName(chat_group_name)
-    group_img = "no_img"
+    group_img = group_img_save()
     if chat_group == None:
         dbConnect.addGroup(uid, chat_group_name, group_img)
         return redirect('/groups')
@@ -224,31 +275,57 @@ def add_chat_group():
 
 
 # チャットグループ編集画面の表示
-@app.route('/edit_group/<cid>')
-def edit_group(cid):
-  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-  uid = session.get("uid")
-  if uid is None:
-    return redirect('/process_login')
+@app.route('/edit_group', methods=['POST'])
+def edit_group():
+  cid = request.form.get('cid')
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  # uid = session.get("uid")
+  # if uid is None:
+  #   return redirect('/process_login')
 
-  group_name = dbConnect.getGroupById(cid)
+  group = dbConnect.getGroupById(cid)
   # return render_template('group.html', chat_groups=chat_groups, uid=uid)
-  return render_template('edit_group.html', cid=cid, group_name=group_name)
+  return render_template('edit_group.html', cid=cid, group=group)
 
 
 # チャットグループ名の更新
+# @app.route('/update_chat_group', methods=['POST'])
+# def update_chat_group():
+#   # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+#   # cid= 1
+#   group_img = "noimg"
+#   uid = session.get("uid")  
+#   if uid is None:
+#       return redirect('/login')
+
+#   cid = request.form.get('cid')
+#   chat_group_name = request.form.get('chat_groupTitle')
+
+#   dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
+#   return redirect('/groups')
+
+
+# グループ画像の更新
 @app.route('/update_chat_group', methods=['POST'])
 def update_chat_group():
-  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-  # cid= 1
-  group_img = "noimg"
-  uid = session.get("uid")  
-  if uid is None:
-      return redirect('/login')
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  cid= 1
+  group_img = None
+  # uid = session.get("uid")  
+  # if uid is None:
+  #     return redirect('/login')
 
-  cid = request.form.get('cid')
+  # cid = request.form.get('cid')
   chat_group_name = request.form.get('chat_groupTitle')
-
+  group_img = group_img_save()
+  print(f'group_img>>>{group_img}')
+  # if 'group_img' in request.files:
+  #   file = request.files['group_img']
+  #   if file:
+  #     # 危険な文字を削除(サニタイズ処理)
+  #     filename = secure_filename(file.filename)
+  #     file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
+  #     group_img = f"img/group_img/{filename}"
   dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
   return redirect('/groups')
 

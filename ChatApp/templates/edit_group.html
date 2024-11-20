@@ -54,21 +54,21 @@
         <p class="page_title"> グループ編集</p>
         <div class="container">
 
-            <form action="/update_chat_group" method="post">
-            <div class="profile">
-                <input class="file_upload" id="file_upload" type="file" name="group_img"
-                    accept="image/png, image/jpeg, image/png">
-                <label for="profile_img">
-                    <!-- もしprofile_imgがあれば {% if group_img %} -->
-                    <img id="jsPreview" src="">
-                    <!--なければデフォルトアイコンを表示 {% else %} -->
-                    <i id="default-icon" class="default-icon fa-solid fa-users">
-                    </i>
-                    <!-- {% endif %} -->
-                </label>
-            </div>
+            <form action="/update_chat_group" method="post" enctype="multipart/form-data">
+                <div class="profile">
+                    <input class="file_upload" id="file_upload" type="file" name="group_img"
+                        accept="image/png, image/jpeg, image/png" value="">
+                    <label for="profile_img">
+                        {% if group.group_img %}
+                        <img id="jsPreview" src="{{ url_for('static', filename=group.group_img) }}">
+                        {% else %}
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group">
+                        </i>
+                        {% endif %}
+                    </label>
+                </div>
 
-                <input type="text" name="chat_groupTitle" value="{{ group_name }}" class="group-input-text">
+                <input type="text" name="chat_groupTitle" value="{{ group.name }}" class="group-input-text">
                 <input type="hidden" name="cid" value="{{ cid }}">
                 <div class="button-container">
                     <button class="btn-white-long" onclick="history.back()">戻る</button>
@@ -85,31 +85,22 @@
 
     <script>
         // プロフィール画像ファイル選択時のプレビュー
-        defaultIcon = document.getElementById('default-icon');
-        jsPreview = document.getElementById("jsPreview");
+        // 画像をアップロードした時に発火
+        document.getElementById('file_upload').addEventListener('change', (e) => {
+            defaultIcon = document.getElementById('default-icon');
+            jsPreview = document.getElementById("jsPreview");
 
-        document.addEventListener("DOMContentLoaded", function () {
-            if (!jsPreview.getAttribute("src") || jsPreview.getAttribute("src") === "") {
-                defaultIcon.style.display = 'block';
-                jsPreview.style.display = 'none';
-            } else {
-                defaultIcon.style.display = 'none';
-                jsPreview.style.display = 'block';
-            }
-
-            document.getElementById('file_upload').addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                console.log(file)
-                if (file) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = (event) => {
-                        jsPreview.src = event.target.result;
-                        defaultIcon.style.display = 'none';
-                        jsPreview.style.display = 'block';
-                    }
-                    fileReader.readAsDataURL(file);
+            const file = e.target.files[0];
+            console.log(file)
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = (event) => {
+                    jsPreview.src = event.target.result;
+                    defaultIcon.style.display = 'none';
+                    jsPreview.style.display = 'block';
                 }
-            });
+                fileReader.readAsDataURL(file);
+            }
         });
     </script>
 </body>

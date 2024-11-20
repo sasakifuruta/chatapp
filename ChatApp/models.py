@@ -150,7 +150,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=COALESCE(%s, group_img) WHERE id=%s;"
             cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:
