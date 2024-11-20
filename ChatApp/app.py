@@ -140,10 +140,10 @@ def logout():
 # def disactive():
 #     return render_template('registration/login.html')
 
-# # 退会ページの表示
-# @app.route('/withdrawal') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
-# def show_withdrawal():
-#     return render_template('disactive.html')
+# 退会ページの表示
+@app.route('/withdrawal') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
+def show_withdrawal():
+    return render_template('disactive.html')
 
 
 @app.route('/withdrawal')
