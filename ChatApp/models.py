@@ -42,7 +42,7 @@ class dbConnect:
 
     # アクティブなユーザを取得2
     @staticmethod
-    def getUser(uid):
+    def getUserById(uid):
         try:
             conn = DB.getConnection()
             cur = conn.cursor()

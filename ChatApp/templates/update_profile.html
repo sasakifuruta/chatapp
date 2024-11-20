@@ -53,8 +53,8 @@
                 <div class="profile">
                     <input class="file_upload" id="file_upload" type="file" name="profile_img" accept="image/png, image/jpeg, image/png">
                     <label for="profile_img">
-                        {% if user.profile_img %}
-                            <img id="jsPreview" src="{{ url_for('static', filename=user.profile_img) }}">
+                        {% if profile_img %}
+                            <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
                         {% else %}
                             <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
                         {% endif %}

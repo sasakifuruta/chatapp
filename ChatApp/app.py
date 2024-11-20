@@ -199,11 +199,13 @@ def update_profile():
   #   name = DB_user["name"]
   #   email = DB_user["email"]
   #   return render_template('update_profile.html', user_name=name, email=email)
-  uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-  DB_user = dbConnect.getUser(uid)
+  # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  DB_user = dbConnect.getUserById(uid) # ココ
   name = DB_user["user_name"]
   email = DB_user["email"]
-  return render_template('update_profile.html', user_name=name, email=email)
+  profile_img = DB_user["profile_img"]
+  return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
 
 
 # アカウント変更処理
@@ -215,7 +217,8 @@ def update():
     password2 = request.form.get('password_confirm')
   
     # uid = session.get['uid']
-    uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+    # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
     DB_user = dbConnect.getUser(uid)
 
     if email != None:
@@ -232,9 +235,10 @@ def update():
       if password != '':
         password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
       uid = uuid.uuid4()
-      profile_img = 'no_img'
+      profile_img = profile_img_save()
       dbConnect.updateUser(name, email, password, profile_img, uid)
       return redirect(url_for("apptitle"))
+    return redirect(url_for("home")) # ココ
 
 # ============================
 # チャットグループ機能
@@ -265,24 +269,6 @@ def create_group():
     #     return redirect('/process_login')
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('create_group.html')
-
-
-# チャットグループの追加
-# @app.route('/create_group', methods=['POST'])
-# def add_chat_group():
-#     # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-#     uid = session.get('uid')
-#     if uid is None:
-#         return redirect('/login')
-#     chat_group_name = request.form.get('group_name')
-#     chat_group = dbConnect.getGroupByName(chat_group_name)
-#     group_img = "no_img"
-#     if chat_group == None:
-#         dbConnect.addGroup(uid, chat_group_name, group_img)
-#         return redirect('/groups')
-#     else:
-#         error = '既に同じ名前のチャットグループが存在しています'
-#         return render_template('error/error.html', error_message=error)
 
 
 # グループ画像をDBに保存する関数
