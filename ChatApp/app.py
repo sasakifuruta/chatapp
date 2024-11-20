@@ -36,12 +36,13 @@ def apptitle():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_s')
 def show_signup():
-  now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-  now_hour = now.hour
-  if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-    return render_template('anger-mon.html')
-  else:
-    return render_template('registration/signup.html')
+  # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+  # now_hour = now.hour
+  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+  #   return render_template('anger-mon.html')
+  # else:
+  #   return render_template('registration/signup.html')
+  return render_template('registration/signup.html')
 
 
 # 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
@@ -85,14 +86,15 @@ def process_signup_form():
 # ログインページの表示
 # アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-@app.route('/next_step_l',)
+@app.route('/next_step_l')
 def show_login():
-  now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-  now_hour = now.hour
-  if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-    return render_template('anger-mon.html')
-  else:
-    return render_template('registration/login.html')
+  # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+  # now_hour = now.hour
+  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+  #   return render_template('anger-mon.html')
+  # else:
+  #   return render_template('registration/login.html')
+  return render_template('registration/login.html')
 
 
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
@@ -101,8 +103,7 @@ def show_login():
 def process_login_form():
     email = request.form.get('email')
     password = request.form.get('password')
-    email = request.form.get('email')
-    password = request.form.get('password')
+    
 
   # 入力漏れの確認
     if email == '' or password == '':
@@ -132,22 +133,22 @@ def logout():
 
 # 退会
 # login.htmlにアクセスするためのエンドポイントの指定。セッションが無効でログインページに返したい時は必要。
-@app.route("/disactive")
-def disactive():
-    return render_template('registration/login.html')
+# @app.route("/disactive")
+# def disactive():
+#     return render_template('registration/login.html')
 
-# 退会ページの表示
-@app.route('/') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
-def show_withdrawal():
-    return render_template('disactive.html')
+# # 退会ページの表示
+# @app.route('/withdrawal') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
+# def show_withdrawal():
+#     return render_template('disactive.html')
 
 
-@app.route('/withdrawal', methods=['GET', 'POST'])
+@app.route('/withdrawal')
 def withdraw_account():
   if not session.get('uid'):
     flash('ログインしてください')
     # print("セッションにuidが存在しません")
-    return redirect(url_for("apptitle"))
+    return redirect('next_step_l')
   else:
     uid = session['uid']
     DB_user = dbConnect.getUser(uid)
@@ -168,11 +169,54 @@ def withdraw_account():
 # アカウント変更画面の表示
 # テンプレートに表示するもの: user_name, email, password_length = len(password)
 
+@app.route('/update_profile')
+def update_profile():
+  # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+  # now_hour = now.hour
+  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+  #   return render_template('anger-mon.html')
+  # else:
+  #   uid = session.get['uid']
+  #   DB_user = dbConnect.getUser(uid)
+  #   name = DB_user["name"]
+  #   email = DB_user["email"]
+  #   return render_template('update_profile.html', user_name=name, email=email)
+  uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+  DB_user = dbConnect.getUser(uid)
+  name = DB_user["user_name"]
+  email = DB_user["email"]
+  return render_template('update_profile.html', user_name=name, email=email)
 
-# アカウント変更
-# 登録成功したらhomeにリダイレクト？
 
+# アカウント変更処理
+@app.route('/update_profile', methods=['POST'])
+def update():
+    name = request.form.get('user_name')
+    email = request.form.get('email')
+    password1 = request.form.get('password')
+    password2 = request.form.get('password_confirm')
+  
+    # uid = session.get['uid']
+    uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+    DB_user = dbConnect.getUser(uid)
 
+    if email != None:
+      regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      if not re.match(regex, email):
+        flash('メールアドレスの形式が正しくありません')
+        return render_template('update_profile.html')
+
+    # if:ユーザーが入力した内容に対しての条件分岐
+    elif password1 != password2:
+      flash('二つのパスワードの値が一致していません')
+      return render_template('update_profile.html')
+    else:
+      if password != '':
+        password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
+      uid = uuid.uuid4()
+      profile_img = 'no_img'
+      dbConnect.updateUser(name, email, password, profile_img, uid)
+      return redirect(url_for("apptitle"))
 
 # ============================
 # チャットグループ機能

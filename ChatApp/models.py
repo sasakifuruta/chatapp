@@ -40,6 +40,23 @@ class dbConnect:
             cur.close()
             conn.close()
 
+    # アクティブなユーザを取得2
+    @staticmethod
+    def getUser(uid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM users WHERE uid = %s AND is_active = 1;"
+            cur.execute(sql, (uid,))
+            user = cur.fetchone()
+            return user
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
+
     
     # アカウント・プロフィール画像編集
     @staticmethod

@@ -48,7 +48,7 @@
     <div class="container-wrap">
         <p class="page_title">アカウント内容</p>
         <div class="container">
-            <form action="" method="post">
+            <form action="/update_profile" method="post">
                 
                 <div class="profile">
                     <input class="file_upload" id="file_upload" type="file" name="profile_img" accept="image/png, image/jpeg, image/png">
@@ -73,12 +73,12 @@
 
                 <div class="input-area">
                     <label for="password">パスワード</label>
-                    <input type="password" name="password" value= "{{ '●' * password_length }}">
+                    <input type="password" name="password" value= "">
                 </div>
 
                 <div class="input-area">
                     <label for="password_confirm">パスワード確認</label>
-                    <input type="password" name="password_confirm" value="{{ '●' * password_length }}">
+                    <input type="password" name="password_confirm" value="">
                 </div>
 
                 <div class="buttons">
