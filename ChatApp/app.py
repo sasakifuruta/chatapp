@@ -58,11 +58,11 @@ def process_signup_form():
 
     # if:ユーザーが入力した内容に対しての条件分岐
     if name == '' or email == '' or password1 == '' or password2 == '':
-      flash('入力されていない項目があります')
+      flash('まだ書いてないところがあるよ！')
     elif not re.match(regex, email):
-      flash('メールアドレスの形式が正しくありません')
+      flash('メールアドレスの書き方がちょっと違うみたいだよ！')
     elif password1 != password2:
-      flash('二つのパスワードの値が一致していません')
+      flash('パスワードが同じじゃないみたいだよ！')
     # elif パスワードの強度判定
     else:
       # PWをハッシュ化。まだ脆弱性あり。
@@ -72,7 +72,7 @@ def process_signup_form():
       DBuser = dbConnect.getUser(email)
       # DBに登録済みの場合
       if DBuser != None:
-        flash('すでに登録されているようです')
+        flash('もう登録されてるみたいだよ！')
       # 新規ユーザーとして登録
       else:
         dbConnect.createUser(uid, name, email, password)
@@ -106,17 +106,17 @@ def process_login_form():
 
   # 入力漏れの確認
     if email == '' or password == '':
-      flash('入力されていない項目があります')
+      flash('まだ書いてないところがあるよ！')
     else:
       # DBからemailをキーに情報を取得
       user = dbConnect.getUser(email)
       if user == None:
-        flash('このユーザーは登録されていません')
+        flash('このユーザーはまだ登録されてないみたいだよ！')
       else:
         # 入力されたPWをハッシュ化し、DBから取得した情報と照合
         hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
         if hashPassword != user["password"]:
-          flash('パスワードが間違っています')
+          flash('パスワードがちがうみたいだよ！')
         else:
           session['uid'] = user["uid"]
           return redirect(url_for("home"))
@@ -145,7 +145,7 @@ def show_withdrawal():
 @app.route('/withdrawal', methods=['GET', 'POST'])
 def withdraw_account():
   if not session.get('uid'):
-    flash('ログインしてください')
+    flash('ログインしてね！')
     # print("セッションにuidが存在しません")
     return redirect(url_for("apptitle"))
   else:
@@ -158,7 +158,7 @@ def withdraw_account():
       flash('退会処理が完了しました。またいつでも遊びにきてね！')
       return redirect(url_for("apptitle"))
     else:
-      flash('退会処理が失敗しました')
+      flash('退会できませんでした。もう一度やってみてね！')
       # print('退会失敗です')
       return redirect('/withdrawal') # とりあえず退会画面にリダイレクト。
       # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
@@ -219,8 +219,9 @@ def add_chat_group():
         dbConnect.addGroup(uid, chat_group_name, group_img)
         return redirect('/groups')
     else:
-        error = '既に同じ名前のチャットグループが存在しています'
-        return render_template('error/error.html', error_message=error)
+        flash('同じ名前のチャットグループがもうあるみたいだよ！')
+        # error = '既に同じ名前のチャットグループが存在しています'
+        # return render_template('error/error.html', error_message=error)
 
 
 # チャットグループ編集画面の表示
@@ -265,7 +266,7 @@ def delete_chat_group():
     cid = request.form.get('cid')
     chat_group = dbConnect.getGroupById(cid)
   if chat_group["uid"] != uid:
-    flash('チャットグループは作成者のみ削除可能です')
+    flash('チャットグループは作った人だけが削除できるよ！')
     return redirect('/')
   else:
     dbConnect.deleteGroup(cid)
