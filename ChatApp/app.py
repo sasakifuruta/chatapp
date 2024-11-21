@@ -141,7 +141,7 @@ def logout():
 #     return render_template('registration/login.html')
 
 # 退会ページの表示
-@app.route('/withdrawal') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
+@app.route('/withdrawal', methods=[]) # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
 def show_withdrawal():
     return render_template('disactive.html')
 
@@ -169,24 +169,7 @@ def withdraw_account():
   # return redirect('/withdrawal')
 
 
-# アカウント変更画面の表示
-# テンプレートに表示するもの: user_name, email, password_length = len(password)
-
-
-# グループ画像をDBに保存する関数
-def profile_img_save():
-  # 画像の保存先ディレクトリ
-  PROFILE_IMG_FOLDER = 'static/img/profile_img'
-  app.config[PROFILE_IMG_FOLDER] = PROFILE_IMG_FOLDER
-  if 'profile_img' in request.files:
-    file = request.files['profile_img']
-    if file:
-      # 危険な文字を削除(サニタイズ処理)
-      filename = secure_filename(file.filename)
-      file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
-      profile_img = f"img/profile_img/{filename}"
-  return profile_img
-
+# アカウント内容画面の表示
 @app.route('/update_profile')
 def update_profile():
   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
@@ -200,45 +183,66 @@ def update_profile():
   #   email = DB_user["email"]
   #   return render_template('update_profile.html', user_name=name, email=email)
   # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-  DB_user = dbConnect.getUserById(uid) # ココ
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  
+  DB_user = dbConnect.getUserById(uid)
   name = DB_user["user_name"]
   email = DB_user["email"]
   profile_img = DB_user["profile_img"]
   return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
 
 
+# プロフィール画像をDBに保存する関数
+def profile_img_save():
+  # 画像の保存先ディレクトリ
+  PROFILE_IMG_FOLDER = 'static/img/profile_img'
+  app.config[PROFILE_IMG_FOLDER] = PROFILE_IMG_FOLDER
+  profile_img = None
+  if 'profile_img' in request.files:
+    file = request.files['profile_img']
+    if file:
+      # 危険な文字を削除(サニタイズ処理)
+      filename = secure_filename(file.filename)
+      file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
+      profile_img = f"img/profile_img/{filename}"
+  return profile_img
+
+
 # アカウント変更処理
 @app.route('/update_profile', methods=['POST'])
 def update():
-    name = request.form.get('user_name')
-    email = request.form.get('email')
-    password1 = request.form.get('password')
-    password2 = request.form.get('password_confirm')
-  
-    # uid = session.get['uid']
-    # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUser(uid)
+  name = request.form.get('user_name')
+  email = request.form.get('email')
+  password1 = request.form.get('password')
+  password2 = request.form.get('password_confirm')
 
-    if email != None:
-      regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-      if not re.match(regex, email):
-        flash('メールアドレスの形式が正しくありません')
-        return render_template('update_profile.html')
+  # uid = session.get['uid']
+  # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  DB_user = dbConnect.getUserById(uid)
 
-    # if:ユーザーが入力した内容に対しての条件分岐
-    elif password1 != password2:
-      flash('二つのパスワードの値が一致していません')
+  if email != None:
+    regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if not re.match(regex, email):
+      flash('メールアドレスの形式が正しくありません')
       return render_template('update_profile.html')
-    else:
-      if password != '':
-        password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
-      uid = uuid.uuid4()
-      profile_img = profile_img_save()
-      dbConnect.updateUser(name, email, password, profile_img, uid)
-      return redirect(url_for("apptitle"))
-    return redirect(url_for("home")) # ココ
+
+  # if:ユーザーが入力した内容に対しての条件分岐
+  if password1 != password2:
+    flash('二つのパスワードの値が一致していません')
+    return render_template('update_profile.html')
+  if password1:
+    password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
+  else:
+    password = DB_user["password"]
+  profile_img = profile_img_save()
+  if profile_img is None:
+    user = dbConnect.getUserById(uid)
+    profile_img = user['profile_img']
+  
+  dbConnect.updateUser(name, email, password, profile_img, uid)
+  print(f"profile_img>>{profile_img}")
+    # return redirect(url_for("apptitle"))
+  return redirect(url_for("home"))
 
 # ============================
 # チャットグループ機能
@@ -276,6 +280,7 @@ def group_img_save():
   # 画像の保存先ディレクトリ
   GROUP_IMG_FOLDER = 'static/img/group_img'
   app.config[GROUP_IMG_FOLDER] = GROUP_IMG_FOLDER
+  group_img = None
   if 'group_img' in request.files:
     file = request.files['group_img']
     if file:
@@ -300,8 +305,9 @@ def add_chat_group():
         dbConnect.addGroup(uid, chat_group_name, group_img)
         return redirect('/groups')
     else:
-        error = '既に同じ名前のチャットグループが存在しています'
-        return render_template('error/error.html', error_message=error)
+        flash('被ってるよ〜')
+        # error = '既に同じ名前のチャットグループが存在しています'
+        # return render_template('error/error.html', error_message=error)
 
 
 # チャットグループ編集画面の表示
@@ -318,29 +324,11 @@ def edit_group():
   return render_template('edit_group.html', cid=cid, group=group)
 
 
-# チャットグループ名の更新
-# @app.route('/update_chat_group', methods=['POST'])
-# def update_chat_group():
-#   # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-#   # cid= 1
-#   group_img = "noimg"
-#   uid = session.get("uid")  
-#   if uid is None:
-#       return redirect('/login')
-
-#   cid = request.form.get('cid')
-#   chat_group_name = request.form.get('chat_groupTitle')
-
-#   dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
-#   return redirect('/groups')
-
-
 # グループ画像の更新
 @app.route('/update_chat_group', methods=['POST'])
 def update_chat_group():
   uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
   cid= 1
-  group_img = None
   # uid = session.get("uid")  
   # if uid is None:
   #     return redirect('/login')
@@ -348,7 +336,10 @@ def update_chat_group():
   # cid = request.form.get('cid')
   chat_group_name = request.form.get('chat_groupTitle')
   group_img = group_img_save()
-  print(f'group_img>>>{group_img}')
+  if group_img is None:
+    group = dbConnect.getGroupById(cid)
+    group_img = group['group_img']
+
   # if 'group_img' in request.files:
   #   file = request.files['group_img']
   #   if file:

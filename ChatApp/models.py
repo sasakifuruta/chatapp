@@ -64,7 +64,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_img=%s WHERE uid=%s;"
+            sql = "UPDATE users SET user_name=%s, email=%s, password=COALESCE(%s, password), profile_img=COALESCE(%s, profile_img) WHERE uid=%s;"
             cur.execute(sql, (name, email, password, profile_img, uid))
             conn.commit()
         except Exception as e:
