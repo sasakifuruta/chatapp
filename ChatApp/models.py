@@ -40,6 +40,23 @@ class dbConnect:
             cur.close()
             conn.close()
 
+    # アクティブなユーザを取得2
+    @staticmethod
+    def getUserById(uid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM users WHERE uid = %s AND is_active = 1;"
+            cur.execute(sql, (uid,))
+            user = cur.fetchone()
+            return user
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
+
     
     # アカウント・プロフィール画像編集
     @staticmethod
@@ -47,7 +64,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE users SET name=%s, email=%s, password=%s, profile_img=%s WHERE uid=%s;"
+            sql = "UPDATE users SET user_name=%s, email=%s, password=COALESCE(%s, password), profile_img=COALESCE(%s, profile_img) WHERE uid=%s;"
             cur.execute(sql, (name, email, password, profile_img, uid))
             conn.commit()
         except Exception as e:
@@ -150,7 +167,7 @@ class dbConnect:
         try:
             conn = DB.getConnection()
             cur = conn.cursor()
-            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=%s WHERE id=%s;"
+            sql = "UPDATE chat_groups SET uid=%s, name=%s, group_img=COALESCE(%s, group_img) WHERE id=%s;"
             cur.execute(sql, (uid, newGroupName, newGroup_img, cid))
             conn.commit()
         except Exception as e:

@@ -48,16 +48,16 @@
     <div class="container-wrap">
         <p class="page_title">アカウント内容</p>
         <div class="container">
-            <form action="" method="post">
+            <form action="/update_profile" method="post" enctype="multipart/form-data">
                 
                 <div class="profile">
                     <input class="file_upload" id="file_upload" type="file" name="profile_img" accept="image/png, image/jpeg, image/png">
                     <label for="profile_img">
-                        <!-- もしprofile_imgがあれば {% if profile_img %} -->
-                            <img id="jsPreview" src="">
-                        <!--なければデフォルトアイコンを表示 {% else %} -->
+                        {% if profile_img %}
+                            <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                        {% else %}
                             <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
-                        <!-- {% endif %} -->
+                        {% endif %}
                     </label>
                 </div>
 
@@ -73,12 +73,12 @@
 
                 <div class="input-area">
                     <label for="password">パスワード</label>
-                    <input type="password" name="password" value= "{{ '●' * password_length }}">
+                    <input type="password" name="password" value= "">
                 </div>
 
                 <div class="input-area">
                     <label for="password_confirm">パスワード確認</label>
-                    <input type="password" name="password_confirm" value="{{ '●' * password_length }}">
+                    <input type="password" name="password_confirm" value="">
                 </div>
 
                 <div class="buttons">
@@ -91,36 +91,57 @@
 
     <script>
         // プロフィール画像ファイル選択時のプレビュー
-        defaultIcon = document.getElementById('default-icon');
-        jsPreview = document.getElementById("jsPreview");
+        // 画像をアップロードした時に発火
+        document.getElementById('file_upload').addEventListener('change', (e) => {
+            defaultIcon = document.getElementById('default-icon');
+            jsPreview = document.getElementById("jsPreview");
 
-
-        document.addEventListener("DOMContentLoaded", function() {
-            if (!jsPreview.getAttribute("src") || jsPreview.getAttribute("src") === ""){
-                    defaultIcon.style.display ='block';
-                    jsPreview.style.display = 'none';
-            }else {
-                defaultIcon.style.display ='none';
-                jsPreview.style.display = 'block';
-            }
-        
-            document.getElementById('file_upload').addEventListener('change', (e)=>{
-                const file = e.target.files[0];
-                console.log(file)
-                if (file) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = (event) =>{
+            const file = e.target.files[0];
+            console.log(file)
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = (event) => {
                     jsPreview.src = event.target.result;
-                    defaultIcon.style.display ='none';
+                    defaultIcon.style.display = 'none';
                     jsPreview.style.display = 'block';
-                    }
-                    fileReader.readAsDataURL(file);
-                } else {
-                    defaultIcon.style.display ='block';
-                    jsPreview.style.display = 'none';
                 }
-            });
+                fileReader.readAsDataURL(file);
+            }
         });
+
+
+
+        // // プロフィール画像ファイル選択時のプレビュー
+        // defaultIcon = document.getElementById('default-icon');
+        // jsPreview = document.getElementById("jsPreview");
+
+
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     if (!jsPreview.getAttribute("src") || jsPreview.getAttribute("src") === ""){
+        //             defaultIcon.style.display ='block';
+        //             jsPreview.style.display = 'none';
+        //     }else {
+        //         defaultIcon.style.display ='none';
+        //         jsPreview.style.display = 'block';
+        //     }
+        
+        //     document.getElementById('file_upload').addEventListener('change', (e)=>{
+        //         const file = e.target.files[0];
+        //         console.log(file)
+        //         if (file) {
+        //             const fileReader = new FileReader();
+        //             fileReader.onload = (event) =>{
+        //             jsPreview.src = event.target.result;
+        //             defaultIcon.style.display ='none';
+        //             jsPreview.style.display = 'block';
+        //             }
+        //             fileReader.readAsDataURL(file);
+        //         } else {
+        //             defaultIcon.style.display ='block';
+        //             jsPreview.style.display = 'none';
+        //         }
+        //     });
+        // });
 
     </script>
 </body>

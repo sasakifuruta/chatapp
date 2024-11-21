@@ -7,22 +7,36 @@
 .group {
     display: flex;
     justify-content: center;
+    align-items: end;
     margin-bottom: 50px;
 }
 
-/* グループアイコン */
+.group-img {
+    width: 70px;
+    aspect-ratio: 1 / 1; 
+    border-radius: 50%;
+}
+
+/* グループアイコン=編集ボタン */
 .btn-edit-group {
     background: none;
     border: none;
 }
 
 /* グループアイコン */
-.group-icon {
+.default-icon  {
     font-size: 3.5em;
     padding: 10px 0 0;
     color: #2b5a56;
     border: solid 1px #2b5a56;
     border-radius: 50%;
+}
+.group-img img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #000;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* グループ名 */
