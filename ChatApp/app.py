@@ -61,9 +61,7 @@ def apptitle():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_s')
 def show_signup():
-  if handle_time_based_redirect()==None:
-    return render_template("/registration/signup.html")
-  return handle_time_based_redirect()
+  return handle_time_based_redirect(daytime='registration/signup.html', nighttime='anger-mom.html')
 
 # 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
 @app.route('/process_signup', methods=['POST'])
@@ -108,9 +106,7 @@ def process_signup_form():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_l')
 def show_login():
-  if handle_time_based_redirect()==None:
-    return render_template("/registration/login.html")
-  return handle_time_based_redirect()
+  return handle_time_based_redirect(daytime='registration/login.html', nighttime='anger-mom.html')
 
 
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
@@ -190,13 +186,11 @@ def update_profile():
   # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
   #   return render_template('anger-mon.html')
   # else:
-  handle_time_based_redirect()
-  if handle_time_based_redirect()==None:
-    uid = session.get['uid']
-    DB_user = dbConnect.getUserById(uid)
-    name = DB_user["name"]
-    email = DB_user["email"]
-    return render_template('update_profile.html', user_name=name, email=email)
+  handle_time_based_redirect(daytime='registration/login.html',nighttime='anger-mom.html')
+  DB_user = session_check()
+  name = DB_user["name"]
+  email = DB_user["email"]
+  return render_template('update_profile.html', user_name=name, email=email)
   # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
   # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  
   # DB_user = dbConnect.getUserById(uid)
