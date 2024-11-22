@@ -18,6 +18,28 @@ app = Flask(__name__)
 app.secret_key = uuid.uuid4().hex
 app.permanent_session_lifetime = timedelta(days=30)
 
+#22時〜６時まで全ての画面鬼母
+def handle_time_based_redirect(daytime, nighttime):
+  now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+  now_hour = now.hour
+  if (2 <= now_hour < 6):
+  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+    return render_template(nighttime='anger-mon.html')
+  else:
+    return render_template(daytime)
+  
+def session_check():
+  uid=session.get('uid')
+  if uid is None:
+    return render_template('registration/login.html')
+  else:
+    DB_user = dbConnect.getUserById(uid)
+    return DB_user
+  
+    # else:
+    #   return None
+      # return render_template(daytime)
+ 
 # ============================
 # 認証機能
 # ============================
@@ -39,14 +61,9 @@ def apptitle():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_s')
 def show_signup():
-  # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-  # now_hour = now.hour
-  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-  #   return render_template('anger-mon.html')
-  # else:
-  #   return render_template('registration/signup.html')
-  return render_template('registration/signup.html')
-
+  if handle_time_based_redirect()==None:
+    return render_template("/registration/signup.html")
+  return handle_time_based_redirect()
 
 # 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
 @app.route('/process_signup', methods=['POST'])
@@ -91,13 +108,9 @@ def process_signup_form():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 @app.route('/next_step_l')
 def show_login():
-  # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-  # now_hour = now.hour
-  # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-  #   return render_template('anger-mon.html')
-  # else:
-  #   return render_template('registration/login.html')
-  return render_template('registration/login.html')
+  if handle_time_based_redirect()==None:
+    return render_template("/registration/login.html")
+  return handle_time_based_redirect()
 
 
 # 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
@@ -177,18 +190,20 @@ def update_profile():
   # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
   #   return render_template('anger-mon.html')
   # else:
-  #   uid = session.get['uid']
-  #   DB_user = dbConnect.getUser(uid)
-  #   name = DB_user["name"]
-  #   email = DB_user["email"]
-  #   return render_template('update_profile.html', user_name=name, email=email)
+  handle_time_based_redirect()
+  if handle_time_based_redirect()==None:
+    uid = session.get['uid']
+    DB_user = dbConnect.getUserById(uid)
+    name = DB_user["name"]
+    email = DB_user["email"]
+    return render_template('update_profile.html', user_name=name, email=email)
   # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  
-  DB_user = dbConnect.getUserById(uid)
-  name = DB_user["user_name"]
-  email = DB_user["email"]
-  profile_img = DB_user["profile_img"]
-  return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
+  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  
+  # DB_user = dbConnect.getUserById(uid)
+  # name = DB_user["user_name"]
+  # email = DB_user["email"]
+  # profile_img = DB_user["profile_img"]
+  # return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
 
 
 # プロフィール画像をDBに保存する関数
