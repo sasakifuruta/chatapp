@@ -7,82 +7,110 @@
     <link rel="stylesheet" href="../static/css/common.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/chat.css">
-    <!-- FontAwesomeのkit -->
     <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
     <title>チャット</title>
 </head>
 
 <body>
     <header>
-        <!-- {{ チャンネル名 }} -->
-        <h2 class="header-top">チャンネル名</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン -->
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top">{{ group_name.name }}</h2>
         <div class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
         </div>
     </header>
 
     <div class="container-wrap">
         <div class="container">
-            <!-- メッセージがあれば -->
-            <!-- {% if messages|length > 0 %} -->
-            
             <!-- 送信日時が古いものを上、新しいものを下に表示 -->
-            <!-- {% for message in messages(ソート済み) %} -->
-            
+            {% for message in messages %}
+            {% if message.uid == user_id %}
             <!-- 自分が送信したメッセージ -->
-            <!-- {% if message.uid == uid %} -->
             <div class="msgs-area right">
-                <figure class="icon-img"><i class="user-avatar fa-solid fa-circle-user"></i>
-                    <figcaption class="icon-name">ユーザー名</figcaption>
-                    <!-- <figcaption class="icon-name">{{ message.user_name }}</figcaption> -->
+                <figure class="icon-img">
+                    <div class="avatar">
+                        {% if profile_img %}
+                        <!-- プロフィール画像 -->
+                        <img class="user-avatar profile" src="{{ url_for('static', filename=profile_img) }}">
+                        {% else %}
+                        <!-- 人型アイコン -->
+                        <i class="user-avatar default-icon fa-solid fa-circle-user"></i>
+                        {% endif %}
+                    </div>
+                    <figcaption class="icon-name">{{ user_name }}</figcaption>
                 </figure>
                 <div class="chatting">
-                    <p class="chat-text">テキストを入力</p>
-                    <!-- <p class="chat-text">{{ message.content }}</p> -->
+                    <p class="chat-text">{{ message.content }}</p>
                 </div>
                 <i class="edit-icon fa-solid fa-pencil js-edit-open"></i>
                 <div class="edit-chat-text">
                     <!-- 編集アイコンをクリックしたら出現するtextarea -->
                     <div class="edit-text">
-                        <form action="" method="post">
-                            <input type="hidden" value="{{ chat_group.id }}" name="cid">
-                            <button type="submit" class="btn-delete" name="message_id" value="{{ message.id }}"><i class="fa-solid fa-trash-can"></i></button>
-                            <textarea name="update-message" name="message">{{ message.content }}</textarea>
-                            <button type="submit" class="btn-update" name="message_id" value="{{ message.id }}"><i class="fa-solid fa-pencil"></i></button>
+                        <form action="/group/{{ cid }}" method="post">
+                            <button type="submit" class="btn-delete" name="action" value="delete"><i
+                                    class="fa-solid fa-trash-can"></i></button>
+                            <textarea name="update-message" id="">{{ message.content }}</textarea>
+                            <input type="hidden" name="mid" value="{{ message.id }}">
+                            <button type="submit" class="btn-update" name="action" value="update"><i
+                                    class="fa-solid fa-pencil"></i></button>
                         </form>
                     </div>
                 </div>
             </div>
 
-
-            <!-- {% else %} -->
+            {% else %}
             <!-- 他の誰かが受信したメッセージ -->
             <div class="msgs-area left">
                 <figure class="icon-img"><i class="user-avatar fa-regular fa-circle-user"></i>
-                    <figcaption class="icon-name">ユーザー名</figcaption>
-                    <!-- <figcaption class="icon-name">{{ message.user_name }}</figcaption> -->
-
+                    <figcaption class="icon-name">{{ message.sender_name }}</figcaption>
                 </figure>
                 <div class="chatting">
                     <p class="chat-text">じゅげむじゅげむ五劫の擦り切れ海砂利水魚の雲来升風来末食う寝る所に住むところラブラ工事のブラ工事</p>
-                    <!-- <p class="chat-text">{{ message.content }}</p> -->
                 </div>
             </div>
-
+            {% endif %}
+            {% endfor %}
         </div>
-        <!-- {% endif %} -->
-        <!-- {% endfor %} -->
-        <!-- {% endif %} -->
     </div>
 
 
     <!-- テキストボックス、送信ボタン -->
     <div class="send-msg">
-        <form action="" method="post">
+        <form action="/post_message" method="post">
             <textarea type="text" name="message" id="" placeholder="Aa"></textarea>
+            <input type="hidden" name="cid" value="{{ cid }}">
             <button type="submit"><i class="send-msg-icon fa-solid fa-paper-plane"></i></button>
         </form>
     </div>
@@ -99,8 +127,8 @@
 
         // 編集アイコン（.js-edit-open）を押したらtextareaを表示
         const edits = document.querySelectorAll(".js-edit-open");
-        edits.forEach(function(edit){
-            edit.addEventListener('click', ()=>{
+        edits.forEach(function (edit) {
+            edit.addEventListener('click', () => {
                 const chatting = edit.previousElementSibling;
                 const editArea = edit.nextElementSibling;
 

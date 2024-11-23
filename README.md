@@ -20,3 +20,5 @@
 │       └── my.cnf
 ├── docker-compose.yml   # Docker-composeファイル
 └── requirements.txt     # 使用モジュール記述ファイル
+
+#s0s0g1です

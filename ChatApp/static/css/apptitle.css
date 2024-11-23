@@ -91,11 +91,13 @@
     margin-bottom: 20px;
     padding: 10px 42px;
 }
-
-/* 「続ける」ボタン */
-.modal-content a {
-    color: #000;
-    font-size: 1.3em;
+.modal-content .cont-btn button{
+    border: none;
+    background: none;
+    font-size: 1.2em;
+}
+.modal-content .cont-btn button:hover {
+    text-decoration: underline;
 }
 
 @media screen and (min-width:768px){

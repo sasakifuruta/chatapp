@@ -14,15 +14,42 @@
 
 <body>
     <header>
-        <!-- ドロワーメニューを追加する -->
-    
-        <h2 class="header-top app-name">App Name</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン　アカウント画面に遷移 -->
-        <a href="#" class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
-        </a>
+        <!-- ハンバーガーメニュー -->
+        <div class="hamburger-menu">
+            <input type="checkbox" id="menu-btn-check">
+            <label for="menu-btn-check" class="menu-btn"><span></span></label>
+            <!--ここから中身-->
+            <div class="menu-content">
+                <ul>
+                    <li>
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li>
+                        <a href="#">グループ</a>
+                    </li>
+                    <li>
+                        <a href="#">アカウント</a>
+                    </li>
+                    <li>
+                        <a href="#">ログアウト</a>
+                    </li>
+                    <li>
+                        <a href="#">退会</a>
+                    </li>
+                </ul>
+            </div>
+            <!--ここまで中身-->
+        </div>
+        <h2 class="header-top app-name">トモチャット</h2>
+        <div class="avatar">
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
     </header>
 
     <div class="container-wrap">
@@ -30,50 +57,42 @@
         <div class="container">
             <div class="groups">
 
-                <!--テンプレート化 {% for group in groups  %} -->
+                {% for group in groups %}
                 <div class="group">
                     <div class="group-img">
-                        <!-- グループ画像 -->
-                        <i class="group-icon fa-solid fa-people-group"></i>
-                        <!-- 画像右下に編集アイコン -->
-                        <i class="update-icon fa-solid fa-pencil"></i>
+                        <form action="/edit_group" method="post">
+                            <button class="btn-edit-group" type="submit">
+                                <input type="hidden" name="cid" value="{{ group.id }}">
+                                {% if group.group_img %}
+                                <img src="{{ url_for('static', filename=group.group_img) }}">
+                                {% else %}
+                                <i id="default-icon" class="default-icon fa-solid fa-people-group">
+                                </i>
+                                {% endif %}
+                            </button>
+                        </form>
                     </div>
                     <!-- チャンネル名 -->
-                    <div class="group-name-wrap">
-                        <p class="group-name">お昼寝チャンネル
-                        </p>
-                        <!-- 未読件数があれば表示 -->
-                        <p class="unread">1</p>
-                    </div>
+                    <a href="{{ url_for('message', cid=group.id) }}" class="group-name-wrap">
+                        <p class="group-name">{{ group.name }}</p>
+                    </a>
                 </div>
-                <!--テンプレート化 {% endfor %} -->
+                {% endfor %}
 
-                <!--テンプレート化 {% for group in groups  %} -->
-                <div class="group">
-                    <div class="group-img">
-                        <!-- グループ画像 -->
-                        <i class="group-icon fa-solid fa-people-group"></i>
-                        <!-- 画像右下に編集アイコン -->
-                        <i class="update-icon fa-solid fa-pencil"></i>
-                    </div>
-                    <!-- チャンネル名 -->
-                    <div class="group-name-wrap">
-                        <p class="group-name">お昼寝チャンネル
-                        </p>
-                        <!-- 未読件数があれば表示 -->
-                        <p class="unread">1</p>
-                    </div>
-                </div>
-                <!--テンプレート化 {% endfor %} -->
+
 
             </div>
         </div>
 
         <div class="group-footer">
             <!-- ＋ボタン -->
-            <button class="btn-create-group" type="button" onclick="location.href='リンク先のURL'">
-                <i class="fa-solid fa-plus"></i>
-            </button>
+            <form action="/create_group" method="get">
+
+                <button class="btn-create-group" type="submit">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+
         </div>
     </div>
 </body>
