@@ -48,11 +48,15 @@
         <p class="page_title">退会</p>
         <div class="container">
             <div class="icon-name">
-                <!-- もしprofile_imgがあれば {% if profile_img %} -->
-                <!-- <img src=""> -->
-                <!--なければデフォルトアイコンを表示 {% else %} -->
-                <i class="default-icon fa-solid fa-circle-user"></i>
-                <!-- {% endif %} -->
+                <div class="profile">
+                    <label for="profile_img">
+                        {% if profile_img %}
+                        <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                        {% else %}
+                        <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+                        {% endif %}
+                    </label>
+                </div>
             </div>
 
             <div class="request_btn">

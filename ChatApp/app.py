@@ -25,7 +25,11 @@ app.permanent_session_lifetime = timedelta(days=30)
 # home.htmlにアクセスするためのエンドポイントの指定
 @app.route("/home")
 def home():
-    return render_template("home.html")
+  # uid = session.get['uid']
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  DB_user = dbConnect.getUserById(uid)
+  profile_img = DB_user["profile_img"]
+  return render_template("home.html", profile_img=profile_img)
 
 
 # apptitle.htmlにアクセスするためのエンドポイントの指定
@@ -37,7 +41,7 @@ def apptitle():
 # アカウント作成
 # アプリタイトル画面の新規登録ボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_s'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-@app.route('/next_step_s')
+@app.route('/next_step_s', methods=['POST'])
 def show_signup():
   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
   # now_hour = now.hour
@@ -89,7 +93,7 @@ def process_signup_form():
 # ログインページの表示
 # アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-@app.route('/next_step_l')
+@app.route('/next_step_l', methods=['POST'])
 def show_login():
   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
   # now_hour = now.hour
@@ -129,7 +133,7 @@ def process_login_form():
 
 # ログアウト
 # ハンバーガーメニューのログアウトボタンを押した際の処理。エンドポイントは'/logout'とした。
-@app.route('/logout', methods=['POST']) # home.htmlのハンバーガーメニューにログアウトボタンのエンドポイントが記述されたら紐づける。
+@app.route('/logout') # home.htmlのハンバーガーメニューにログアウトボタンのエンドポイントが記述されたら紐づける。
 def logout():
   session.clear()
   return redirect(url_for("apptitle"))
@@ -141,9 +145,13 @@ def logout():
 #     return render_template('registration/login.html')
 
 # 退会ページの表示
-@app.route('/withdrawal', methods=[]) # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
+@app.route('/withdrawal') # home.htmlのハンバーガーメニューに退会ボタンのエンドポイントが記述されたら紐づける。
 def show_withdrawal():
-    return render_template('disactive.html')
+  # uid = session.get['uid']
+  uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  DB_user = dbConnect.getUserById(uid)
+  profile_img = DB_user["profile_img"]
+  return render_template('disactive.html', profile_img=profile_img)
 
 
 @app.route('/withdrawal')
@@ -256,23 +264,32 @@ def index():
     # if uid is None:
     #     return redirect('/process_login')
     # else:
+    DB_user = dbConnect.getUserById(uid)
+    profile_img = None
+    profile_img = DB_user['profile_img']
+
     chat_groups = dbConnect.getGroupAll() 
     chat_groups = list(chat_groups)
     chat_groups.reverse()
+    for group in chat_groups:
+      group['group_img'] = group['group_img']
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
-    return render_template('group.html', groups=chat_groups,)
+    return render_template('group.html', groups=chat_groups, profile_img=profile_img)
 
 
 # チャットグループの追加画面の表示
 @app.route('/create_group')
 def create_group():
     uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    DB_user = dbConnect.getUserById(uid)
+    profile_img = None
+    profile_img = DB_user['profile_img']
     # uid = session.get("uid")
     
     # if uid is None:
     #     return redirect('/process_login')
     # return render_template('group.html', chat_groups=chat_groups, uid=uid)
-    return render_template('create_group.html')
+    return render_template('create_group.html', profile_img=profile_img)
 
 
 # グループ画像をDBに保存する関数
@@ -315,60 +332,99 @@ def add_chat_group():
 def edit_group():
   cid = request.form.get('cid')
   uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+  DB_user = dbConnect.getUserById(uid)
+  profile_img = None
+  profile_img = DB_user['profile_img']
   # uid = session.get("uid")
   # if uid is None:
   #   return redirect('/process_login')
 
   group = dbConnect.getGroupById(cid)
   # return render_template('group.html', chat_groups=chat_groups, uid=uid)
-  return render_template('edit_group.html', cid=cid, group=group)
+  return render_template('edit_group.html',
+                        cid=cid,
+                        group=group,
+                        profile_img=profile_img)
 
 
 # グループ画像の更新
+# @app.route('/update_chat_group', methods=['POST'])
+# def update_chat_group():
+#   uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+#   cid= 1
+#   # uid = session.get("uid")  
+#   # if uid is None:
+#   #     return redirect('/login')
+
+#   # cid = request.form.get('cid')
+#   chat_group_name = request.form.get('chat_groupTitle')
+#   group_img = group_img_save()
+#   if group_img is None:
+#     group = dbConnect.getGroupById(cid)
+#     group_img = group['group_img']
+
+#   # if 'group_img' in request.files:
+#   #   file = request.files['group_img']
+#   #   if file:
+#   #     # 危険な文字を削除(サニタイズ処理)
+#   #     filename = secure_filename(file.filename)
+#   #     file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
+#   #     group_img = f"img/group_img/{filename}"
+#   dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
+#   return redirect('/groups')
+
+
+# # チャットグループの削除
+# @app.route('/update_chat_group', methods=['POST'])
+# def delete_chat_group():
+#   # uid = session.get("uid")
+#   uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+#   cid= 1
+#   # if uid is None:
+#   #     return redirect('/login')
+#   # else:
+#   #   cid = request.form.get('cid')
+#   #   chat_group = dbConnect.getGroupById(cid)
+#   # if chat_group["uid"] != uid:
+#   #   flash('チャットグループは作った人だけが削除できるよ！')
+#   #   return redirect('/')
+#   # else:
+#   dbConnect.deleteGroup(cid)
+#   return redirect('/groups')
+
+
 @app.route('/update_chat_group', methods=['POST'])
 def update_chat_group():
   uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-  cid= 1
+  if uid is None:
+      return redirect('/login')
+  # cid= 1
+  action = request.form.get('action')
   # uid = session.get("uid")  
   # if uid is None:
   #     return redirect('/login')
-
-  # cid = request.form.get('cid')
-  chat_group_name = request.form.get('chat_groupTitle')
-  group_img = group_img_save()
-  if group_img is None:
+  cid = request.form.get('cid')
+  
+  # 更新
+  if action == 'update':
+    chat_group_name = request.form.get('chat_groupTitle')
+    # 画像の初期化
+    # group_img = None
+    # 画像の更新があれば
+    group_img = group_img_save()
+    # 画像の設定してあるなら
     group = dbConnect.getGroupById(cid)
-    group_img = group['group_img']
-
-  # if 'group_img' in request.files:
-  #   file = request.files['group_img']
-  #   if file:
-  #     # 危険な文字を削除(サニタイズ処理)
-  #     filename = secure_filename(file.filename)
-  #     file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
-  #     group_img = f"img/group_img/{filename}"
-  dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
-  return redirect('/groups')
-
-
-# チャットグループの削除
-@app.route('/update_chat_group', methods=['POST'])
-def delete_chat_group():
-  uid = session.get("uid")
-  # uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-  # cid= 1
-  if uid is None:
-      return redirect('/login')
-  else:
-    cid = request.form.get('cid')
-    chat_group = dbConnect.getGroupById(cid)
-  if chat_group["uid"] != uid:
-    flash('チャットグループは作った人だけが削除できるよ！')
-    return redirect('/')
-  else:
+    print(f'cid>>{cid}')
+    print(f'group>>{group}')
+    dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
+  # 削除
+  elif action == 'delete':
+    # chat_group = dbConnect.getGroupById(cid)
+    # if chat_group["uid"] != uid:
+    #   flash('チャットグループは作った人だけが削除できるよ！')
     dbConnect.deleteGroup(cid)
+    print(f'削除cid>>{cid}')
   return redirect('/groups')
-
 
 
 # ======================
@@ -378,24 +434,38 @@ def delete_chat_group():
 # チャット画面表示
 @app.route('/group/<cid>')
 def message(cid):
-    uid = session.get('uid')
-    # uid  = '970af84c-dd40-47ff-af23-282b72b7cca8' # テスト用
-    DB_user = dbConnect.getUser(uid)
-    if DB_user is None:
-        return redirect('/login')
-
+    # uid = session.get('uid')
+    uid  = '970af84c-dd40-47ff-af23-282b72b7cca8' # テスト用
+    DB_user = dbConnect.getUserById(uid)
+    # if DB_user is None:
+    #     return redirect('/login')
+    profile_img = None
+    profile_img = DB_user['profile_img']
+    user_name = DB_user['user_name']
+    user_id = DB_user['uid']
     group_name = dbConnect.getGroupById(cid)
     messages = dbConnect.getMessageAll(cid)
-    return render_template('chat.html', user_name=DB_user, messages=messages, group_name=group_name, cid=cid)
+    for message in messages:
+      sender = dbConnect.getUserById(message['uid'])
+      message['sender_name'] = sender['user_name']
+    
+    return render_template('chat.html', 
+                          user_name=user_name,
+                          user_id=user_id,
+                          profile_img=profile_img,
+                          messages=messages,
+                          group_name=group_name,
+                          cid=cid)
 
 
 # メッセージの投稿
 @app.route('/post_message', methods=['POST'])
 def add_message():
-    uid = session.get('uid')
+    # uid = session.get('uid')
+    uid  = '970af84c-dd40-47ff-af23-282b72b7cca8' # テスト用
     DB_user = dbConnect.getUser(uid)
-    if DB_user is None:
-        return redirect('/login')
+    # if DB_user is None:
+    #     return redirect('/login')
 
     message = request.form.get('message')
     cid = request.form.get('cid')
@@ -407,10 +477,11 @@ def add_message():
 # メッセージの更新と削除
 @app.route('/group/<cid>', methods=['POST'])
 def update_message(cid):
-    uid = session.get('uid')
+    # uid = session.get('uid')
+    uid  = '970af84c-dd40-47ff-af23-282b72b7cca8' # テスト用
     DB_user = dbConnect.getUser(uid)
-    if DB_user is None:
-        return redirect('/login')
+    # if DB_user is None:
+    #     return redirect('/login')
 
     action = request.form.get('action')
     mid = request.form.get('mid')

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../static/css/common.css">
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/home.css">
+    <script src="../static/js/header.js"></script>
     <!-- FontAwesomeのkit -->
     <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
     <title>ホーム</title>
@@ -16,6 +17,7 @@
     <!-- ヘッダー -->
     <header>
         <!-- ハンバーガーメニュー -->
+        <div id="box"></div>
         <div class="hamburger-menu">
             <input type="checkbox" id="menu-btn-check">
             <label for="menu-btn-check" class="menu-btn"><span></span></label>
@@ -46,24 +48,28 @@
 
     <!-- flashメッセージ始まり -->
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% endwith %}
     <!-- flashメッセージ終わり -->
 
     <div class="container-wrap">
         <div class="container">
             <div class="icon-name">
-                <!-- もしprofile_imgがあれば {% if profile_img %} -->
-                <!-- <img src=""> -->
-                <!--なければデフォルトアイコンを表示 {% else %} -->
-                <i class="default-icon fa-solid fa-circle-user"></i>
-                <!-- {% endif %} -->
+                <div class="profile">
+                    <label for="profile_img">
+                        {% if profile_img %}
+                        <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                        {% else %}
+                        <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+                        {% endif %}
+                    </label>
+                </div>
                 <p class="user_name">{{ user_name }}</p>
             </div>
 
