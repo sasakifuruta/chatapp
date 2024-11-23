@@ -22,6 +22,18 @@
         <h2 class="header-top app-name">トモチャット</h2>
     </header>
 
+    <!-- flashメッセージ始まり -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!-- flashメッセージ終わり -->
+
     <div class="container-wrap">
         <p class="page_title">ログイン</p>
         <div class="container">

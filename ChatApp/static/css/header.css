@@ -85,7 +85,7 @@ header {
     list-style: none;
 }
 
-.menu-content ul li a {
+.menu-content ul li a{
     display: block;
     width: 100%;
     font-size: 15px;
@@ -96,7 +96,19 @@ header {
     position: relative;
 }
 
-.menu-content ul li a::before {
+.menu-content ul button {
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: #fff;
+    padding: 9px 15px 10px 0;
+}
+.menu-content ul form{
+    position: relative;
+}
+
+.menu-content ul li a::before,
+.menu-content ul form::before {
     content: "";
     width: 7px;
     height: 7px;

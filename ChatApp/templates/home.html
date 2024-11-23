@@ -34,7 +34,9 @@
                         <a href="{{ url_for('update_profile') }}">アカウント</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('logout') }}">ログアウト</a>
+                        <form action="/logout" method="post">
+                            <button type="submit">ログアウト</button>
+                        </form>
                     </li>
                     <li>
                         <a href="{{ url_for('show_withdrawal') }}">退会</a>
@@ -47,11 +49,11 @@
     </header>
 
     <!-- flashメッセージ始まり -->
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
         {% endfor %}
     </ul>
     {% endif %}
@@ -73,8 +75,8 @@
                 <p class="user_name">{{ user_name }}</p>
             </div>
 
-            <button class="btn-black-long" onclick="location.href='{{ url_for("update_profile") }}'">プロフィール編集</button>
-            <button class="btn-white-long" onclick="location.href='{{ url_for("index") }}'">グループ一覧</button>
+            <button class="btn-black-long" onclick="location.href=`{{ url_for('update_profile') }}`">プロフィール編集</button>
+            <button class="btn-white-long" onclick="location.href=`{{ url_for('index') }}`">グループ一覧</button>
         </div>
     </div>
 
