@@ -131,13 +131,14 @@ def process_signup_form():
 # return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
 # @app.route('/next_step_l', methods=['POST'])
 # def show_login():
-#   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-#   # now_hour = now.hour
-#   # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-#   #   return render_template('anger-mon.html')
-#   # else:
-#   #   return render_template('registration/login.html')
+#   now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+#   now_hour = now.hour
+#   if (22 <= now_hour < 24) or (0 <= now_hour < 6):
+#     return render_template('anger-mon.html')
+#   else:
+#     return render_template('registration/login.html')
 #   return render_template('registration/login.html')
+
 
 # ログインページの表示 >> handle_time関数を適用
 @app.route('/next_step_l', methods=['POST'])
@@ -353,6 +354,9 @@ def add_chat_group():
     action = request.form.get('action')
     if action=='create-group':
         chat_group_name = request.form.get('group_name')
+        if chat_group_name == '':
+            flash('チャットグループの名前を付けてね！', 'flash caution')
+            return redirect('/create_group')
         chat_group = dbConnect.getGroupByName(chat_group_name)
         group_img = group_img_save()
         if chat_group == None:
@@ -360,7 +364,7 @@ def add_chat_group():
             return redirect('/groups')
         else:
             flash('同じ名前のチャットグループがもうあるみたいだよ！', 'flash ng')
-            return 'None'
+            return redirect('/create_group')
     return redirect('/groups')
 
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    {% block css %}
+    {% endblock %}
+    <!-- FontAwesomeのkit -->
+    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
+    <title>トモチャット</title>
+</head>
+<body>
+    {% include 'header.html' %}
+    
+    <!-- flashメッセージ始まり -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!-- flashメッセージ終わり -->
+
+    <div class="container-wrap">
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    {% block script %}
+    {% endblock %}
+</body>
+</html>

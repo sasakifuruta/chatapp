@@ -1,85 +1,23 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/common.css">
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/home.css">
-    <script src="../static/js/header.js"></script>
-    <!-- FontAwesomeのkit -->
-    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
-    <title>ホーム</title>
-</head>
-
-<body>
-    <!-- ヘッダー -->
-    <header>
-        <!-- ハンバーガーメニュー -->
-        <div id="box"></div>
-        <div class="hamburger-menu">
-            <input type="checkbox" id="menu-btn-check">
-            <label for="menu-btn-check" class="menu-btn"><span></span></label>
-            <!--ここから中身-->
-            <div class="menu-content">
-                <ul>
-                    <li>
-                        <a href="{{ url_for('home') }}">ホーム</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('index') }}">グループ</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('update_profile') }}">アカウント</a>
-                    </li>
-                    <li>
-                        <form action="/logout" method="post">
-                            <button type="submit">ログアウト</button>
-                        </form>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('show_withdrawal') }}">退会</a>
-                    </li>
-                </ul>
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="icon-name">
+            <div class="profile">
+                <label for="profile_img">
+                    {% if profile_img %}
+                    <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                    {% else %}
+                    <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+                    {% endif %}
+                </label>
             </div>
-            <!--ここまで中身-->
+            <p class="user_name">{{ user_name }}</p>
         </div>
-        <h2 class="header-top app-name">トモチャット</h2>
-    </header>
 
-    <!-- flashメッセージ始まり -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <ul>
-        {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    <!-- flashメッセージ終わり -->
-
-    <div class="container-wrap">
-        <div class="container">
-            <div class="icon-name">
-                <div class="profile">
-                    <label for="profile_img">
-                        {% if profile_img %}
-                        <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
-                        {% else %}
-                        <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
-                        {% endif %}
-                    </label>
-                </div>
-                <p class="user_name">{{ user_name }}</p>
-            </div>
-
-            <button class="btn-black-long" onclick="location.href=`{{ url_for('update_profile') }}`">プロフィール編集</button>
-            <button class="btn-white-long" onclick="location.href=`{{ url_for('index') }}`">グループ一覧</button>
-        </div>
+        <button class="btn-black-long" onclick="location.href=`{{ url_for('update_profile') }}`">プロフィール編集</button>
+        <button class="btn-white-long" onclick="location.href=`{{ url_for('index') }}`">グループ一覧</button>
     </div>
-
-</body>
-
-</html>
+{% endblock %}
