@@ -41,12 +41,15 @@
             <!--ここまで中身-->
         </div>
         <h2 class="header-top app-name">トモチャット</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン　アカウント画面に遷移 -->
-        <a href="#" class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
-        </a>
+        <div class="avatar">
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
     </header>
 
     <!--メインコンテンツ-->
@@ -60,8 +63,9 @@
                         accept="image/png, image/jpeg, image/png" value="">
                     <label for="profile_img">
                         {% if group.group_img %}
-                        <img id="jsPreview" src="{{ url_for('static', filename=group.group_img) }}">
+                        <img src="{{ url_for('static', filename=group.group_img) }}">
                         {% else %}
+                        <img id="jsPreview" src="">
                         <i id="default-icon" class="default-icon fa-solid fa-people-group">
                         </i>
                         {% endif %}
@@ -72,10 +76,10 @@
                 <input type="hidden" name="cid" value="{{ cid }}">
                 <div class="button-container">
                     <button class="btn-white-long" onclick="history.back()">戻る</button>
-                    <button class="btn-black-long" type="submit">更新する</button>
+                    <button class="btn-black-long" type="submit" name="action" value="update">更新する</button>
                 </div>
                 <div class="del-btn-container">
-                    <button class="btn-black-long" type="submit">削除する</button>
+                    <button class="btn-black-long" type="submit" name="action" value="delete">削除する</button>
                 </div>
             </form>
         </div>
@@ -86,22 +90,23 @@
     <script>
         // プロフィール画像ファイル選択時のプレビュー
         // 画像をアップロードした時に発火
-        document.getElementById('file_upload').addEventListener('change', (e) => {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('file_upload').addEventListener('change', (e) => {
             defaultIcon = document.getElementById('default-icon');
             jsPreview = document.getElementById("jsPreview");
-
             const file = e.target.files[0];
             console.log(file)
             if (file) {
                 const fileReader = new FileReader();
                 fileReader.onload = (event) => {
-                    jsPreview.src = event.target.result;
                     defaultIcon.style.display = 'none';
                     jsPreview.style.display = 'block';
+                    jsPreview.src = event.target.result;
                 }
                 fileReader.readAsDataURL(file);
             }
-        });
+        })
+    });
     </script>
 </body>
 

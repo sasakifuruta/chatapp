@@ -40,11 +40,15 @@
             <!--ここまで中身-->
         </div>
         <h2 class="header-top">{{ group_name.name }}</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン -->
         <div class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
         </div>
     </header>
 
@@ -52,11 +56,19 @@
         <div class="container">
             <!-- 送信日時が古いものを上、新しいものを下に表示 -->
             {% for message in messages %}
-
-            <!-- if message.sender_id == ログイン中のユーザーID -->
+            {% if message.uid == user_id %}
             <!-- 自分が送信したメッセージ -->
             <div class="msgs-area right">
-                <figure class="icon-img"><i class="user-avatar fa-solid fa-circle-user"></i>
+                <figure class="icon-img">
+                    <div class="avatar">
+                        {% if profile_img %}
+                        <!-- プロフィール画像 -->
+                        <img class="user-avatar profile" src="{{ url_for('static', filename=profile_img) }}">
+                        {% else %}
+                        <!-- 人型アイコン -->
+                        <i class="user-avatar default-icon fa-solid fa-circle-user"></i>
+                        {% endif %}
+                    </div>
                     <figcaption class="icon-name">{{ user_name }}</figcaption>
                 </figure>
                 <div class="chatting">
@@ -67,10 +79,12 @@
                     <!-- 編集アイコンをクリックしたら出現するtextarea -->
                     <div class="edit-text">
                         <form action="/group/{{ cid }}" method="post">
-                            <button type="submit" class="btn-delete" name="action" value="delete"><i class="fa-solid fa-trash-can"></i></button>
+                            <button type="submit" class="btn-delete" name="action" value="delete"><i
+                                    class="fa-solid fa-trash-can"></i></button>
                             <textarea name="update-message" id="">{{ message.content }}</textarea>
                             <input type="hidden" name="mid" value="{{ message.id }}">
-                            <button type="submit" class="btn-update" name="action" value="update"><i class="fa-solid fa-pencil"></i></button>
+                            <button type="submit" class="btn-update" name="action" value="update"><i
+                                    class="fa-solid fa-pencil"></i></button>
                         </form>
                     </div>
                 </div>
@@ -80,15 +94,15 @@
             <!-- 他の誰かが受信したメッセージ -->
             <div class="msgs-area left">
                 <figure class="icon-img"><i class="user-avatar fa-regular fa-circle-user"></i>
-                    <figcaption class="icon-name">ユーザー名</figcaption>
+                    <figcaption class="icon-name">{{ message.sender_name }}</figcaption>
                 </figure>
                 <div class="chatting">
                     <p class="chat-text">じゅげむじゅげむ五劫の擦り切れ海砂利水魚の雲来升風来末食う寝る所に住むところラブラ工事のブラ工事</p>
                 </div>
             </div>
+            {% endif %}
+            {% endfor %}
         </div>
-        <!--  endif  -->
-        {% endfor %}
     </div>
 
 

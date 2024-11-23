@@ -16,8 +16,11 @@
 .msgs-area.right {
     flex-direction: row-reverse;
 }
-.msgs-area.right:not(figure) {
+.msgs-area.right {
     align-items: end;
+}
+.msgs-area.right .icon-img {
+    align-self: flex-start;
 }
 .edit-icon {
     padding-bottom: 15px;
@@ -32,8 +35,13 @@
     background-color: #CCFFFF;
     text-align: left;
     border-radius: 12px;
-    max-width: 300px;
-    
+    max-width: 300px;  
+}
+/* メッセージ本体 */
+.chat-text {
+    width: 100%;
+    word-break: break-word;
+
 }
 
 /* 吹き出しの三角部分 */
@@ -96,18 +104,6 @@
 .edit-chat-text {
     display: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

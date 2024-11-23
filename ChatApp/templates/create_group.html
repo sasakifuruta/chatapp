@@ -41,12 +41,15 @@
             <!--ここまで中身-->
         </div>
         <h2 class="header-top app-name">トモチャット</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン　アカウント画面に遷移 -->
-        <a href="#" class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
-        </a>
+        <div class="avatar">
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
     </header>
 
     <!--メインコンテンツ-->
@@ -68,7 +71,7 @@
                 <input name="group_name" type="text" value="" placeholder="グループ名を入力してください" class="group-input-text">
                 <div class="button-container">
                     <button class="btn-white-long" onclick="history.back()">戻る</button>
-                    <button type="submit" class="btn-black-long">作成する</button>
+                    <button type="submit" class="btn-black-long" name="action" value="create-group">作成する</button>
                 </div>
             </form>
         </div>

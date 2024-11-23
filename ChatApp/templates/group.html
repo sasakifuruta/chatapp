@@ -41,12 +41,15 @@
             <!--ここまで中身-->
         </div>
         <h2 class="header-top app-name">トモチャット</h2>
-        <!-- {{ プロフィール画像 }} -->
-        <!-- 人型アイコン　アカウント画面に遷移 -->
-        <a href="#" class="avatar">
-            <i class="fa-solid fa-circle-user">
-            </i>
-        </a>
+        <div class="avatar">
+            {% if profile_img %}
+            <!-- プロフィール画像 -->
+            <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+            {% else %}
+            <!-- 人型アイコン -->
+            <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+            {% endif %}
+        </div>
     </header>
 
     <div class="container-wrap">
@@ -56,7 +59,6 @@
 
                 {% for group in groups %}
                 <div class="group">
-
                     <div class="group-img">
                         <form action="/edit_group" method="post">
                             <button class="btn-edit-group" type="submit">
@@ -71,10 +73,9 @@
                         </form>
                     </div>
                     <!-- チャンネル名 -->
-                    <div class="group-name-wrap">
-                        <p class="group-name">{{ group.name }}
-                        </p>
-                    </div>
+                    <a href="{{ url_for('message', cid=group.id) }}" class="group-name-wrap">
+                        <p class="group-name">{{ group.name }}</p>
+                    </a>
                 </div>
                 {% endfor %}
 

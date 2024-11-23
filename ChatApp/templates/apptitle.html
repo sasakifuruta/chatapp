@@ -33,7 +33,7 @@
                         </p>
 
                         <div class="cont-btn">
-                            <form action="/next_step_s" method="get">
+                            <form action="/next_step_s" method="post">
                                 <button type="submit">続ける</button>
                             </form>
                         </div>
@@ -59,7 +59,7 @@
                         </p>
 
                         <div class="cont-btn">
-                            <form action="/next_step_l" method="get">
+                            <form action="/next_step_l" method="post">
                                 <button type="submit">続ける</button>
                             </form>
                         </div>
@@ -82,22 +82,22 @@
         const signupModalClose = document.getElementById('js-signupModal-close');
 
         // 「新規登録」ボタンをクリックしてモーダルを開く
-        function modalOpen() {
+        function sModalOpen() {
             signupModal.classList.add('is-active');
         }
-        signupModalOpen.addEventListener('click', modalOpen);
+        signupModalOpen.addEventListener('click', sModalOpen);
         // 閉じるボタンをクリックしてモーダルを閉じる
-        function modalClose() {
+        function sModalClose() {
             signupModal.classList.remove('is-active');
         }
-        signupModalClose.addEventListener('click', modalClose);
+        signupModalClose.addEventListener('click', sModalClose);
         // モーダルの外側をクリックしてモーダルを閉じる
-        function modalOut(e) {
+        function sModalOut(e) {
             if (e.target == signupModal) {
                 signupModal.classList.remove('is-active');
             }
         }
-        addEventListener('click', modalOut);
+        addEventListener('click', sModalOut);
 
 
 
@@ -105,27 +105,27 @@
         // ログインボタン モーダル
         // ========================
         // 要素を取得
-        const modal = document.getElementById('js-loginModal');
-        const open = document.getElementById('js-loginModal-open');
-        const close = document.getElementById('js-loginModal-close');
+        const loginModal = document.getElementById('js-loginModal');
+        const loginModalOpen = document.getElementById('js-loginModal-open');
+        const loginModalClose = document.getElementById('js-loginModal-close');
 
         // 「ログイン」ボタンをクリックしてモーダルを開く
-        function modalOpen() {
-            modal.classList.add('is-active');
+        function lModalOpen() {
+            loginModal.classList.add('is-active');
         }
-        open.addEventListener('click', modalOpen);
+        loginModalOpen.addEventListener('click', lModalOpen);
         // 閉じるボタンをクリックしてモーダルを閉じる
-        function modalClose() {
-            modal.classList.remove('is-active');
+        function lModalClose() {
+            loginModal.classList.remove('is-active');
         }
-        close.addEventListener('click', modalClose);
+        loginModalClose.addEventListener('click', lModalClose);
         // モーダルの外側をクリックしてモーダルを閉じる
-        function modalOut(e) {
-            if (e.target == modal) {
-                modal.classList.remove('is-active');
+        function lModalOut(e) {
+            if (e.target == loginModal) {
+                loginModal.classList.remove('is-active');
             }
         }
-        addEventListener('click', modalOut);
+        addEventListener('click', lModalOut);
 
     </script>
 </body>
