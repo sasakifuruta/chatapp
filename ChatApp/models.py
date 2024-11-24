@@ -51,6 +51,7 @@ class dbConnect:
             user = cur.fetchone()
             return user
         except Exception as e:
+            print('getUserById')
             print(f'エラーが発生しています: {e}')
             abort(500)
         finally:
@@ -85,6 +86,7 @@ class dbConnect:
             cur.execute(sql, (uid,))
             conn.commit()
         except Exception as e:
+            print('deactivateUser')
             print(f'エラーが発生しています: {e}')
             abort(500)
         finally:
@@ -108,8 +110,27 @@ class dbConnect:
         finally:
             cur.close()
             conn.close()
+            
+            
+    # グループ作成者（uid)が該当する全グループを取得
+    @staticmethod
+    def getGroupAllByCreateUer(uid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM chat_groups WHERE uid=%s;"
+            cur.execute(sql, (uid,))
+            groups = cur.fetchall()
+            return groups
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
 
-    
+
+    # cidでグループを取得
     @staticmethod
     def getGroupById(cid):
         try:
@@ -126,7 +147,8 @@ class dbConnect:
             cur.close()
             conn.close()
 
-    
+
+    # グループ名で取得
     @staticmethod
     def getGroupByName(group_name):
         try:
@@ -142,7 +164,7 @@ class dbConnect:
         finally:
             cur.close()
             conn.close()
-
+    
     
     # グループ追加
     @staticmethod

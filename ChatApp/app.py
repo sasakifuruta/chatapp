@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, render_template, url_for, session, f
 from datetime import timedelta
 from werkzeug.utils import secure_filename
 import datetime
+import time
 from zoneinfo import ZoneInfo
 import hashlib
 import uuid
@@ -20,10 +21,9 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 
 # =====================================
-# 全画面共通：時間を取得し表示画面を振り分ける
+# 全画面共通
 # =====================================
 # 22時〜６時まで全ての画面鬼母
-# def handle_time_based_redirect(daytime, nighttime):
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
@@ -32,14 +32,95 @@ def handle_time():
         return render_template('anger-mon.html')
     # else:
     return None
+    # return render_template(daytime)
 
 
 # セッションを確認しアクティブなユーザを取得
 def session_check():
     uid = session.get('uid')
     if uid is None:
-        return None 
+        return None
     return dbConnect.getUserById(uid)
+
+
+# =========================
+# 画像関連
+# =========================
+
+# 拡張子を確認し、ファイル名を付ける
+def generate_filename(file):
+    origin_filename = file.filename
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    extension = origin_filename.rsplit('.', 1)[-1].lower()
+    if extension in ALLOWED_EXTENSIONS:
+        filename = secure_filename(origin_filename)
+        timestamp = int(time.time())
+        return f"{timestamp}_{filename}"
+    else:
+        flash('画像を選んでね', 'flash ng')
+        return 'Not img'
+
+
+# プロフィール画像をフォルダに保存する
+def profile_img_save(template):
+    # 画像の保存先ディレクトリ
+    PROFILE_IMG_FOLDER = 'static/img/profile_img'
+    app.config[PROFILE_IMG_FOLDER] = PROFILE_IMG_FOLDER
+    profile_img = None
+    if 'profile_img' in request.files:
+        file = request.files['profile_img']
+        if file:
+            filename = generate_filename(file)
+            # 拡張子が画像でない場合　
+            if filename == 'Not img':
+                return redirect(url_for(template))
+            file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
+            profile_img = f"img/profile_img/{filename}"
+    return profile_img
+
+
+# グループ画像をフォルダに保存する
+def group_img_save(template):
+    # 画像の保存先ディレクトリ
+    GROUP_IMG_FOLDER = 'static/img/group_img'
+    app.config[GROUP_IMG_FOLDER] = GROUP_IMG_FOLDER
+    group_img = None
+    if 'group_img' in request.files:
+        file = request.files['group_img']
+        if file:
+            filename = generate_filename(file)
+            # 拡張子が画像でない場合　
+            if filename == 'Not img':
+                return redirect(url_for(template))
+            file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
+            group_img = f"img/group_img/{filename}"
+    return group_img
+
+
+# DBの画像パスを更新するときに、フォルダにある古い画像を削除する
+def delete_img(category, id):
+    if category == 'profile':
+        img_path = dbConnect.getUserById(id)['profile_img']
+    elif category == 'group':
+        img_path = dbConnect.getGroupById(id)['group_img']
+    if os.path.exists(f'static/{img_path}'):
+        os.remove(f'static/{img_path}')
+        print(f'img_path>>{img_path}')
+    return 'delete_img OK'
+
+
+# 退会した人の画像をフォルダから削除する
+def delete_users_img(uid):
+    profile_img = dbConnect.getUserById(uid)['profile_img']
+    print(f'プロフィール写真を削除>>{profile_img}')
+    print(f'static/{profile_img}')
+    os.remove(f'static/{profile_img}')
+    users_group_images = dbConnect.getGroupAllByCreateUer(uid)
+    for group_image in users_group_images:
+        if os.path.exists(f'static/{group_image}'):
+            os.remove(f'static/{group_image}')
+        print(f'グループ写真を削除>>{group_image}')
+    return 'delete_img OK'
 
 
 # ============================
@@ -163,6 +244,7 @@ def withdraw_account():
     DB_user = session_check()
     if DB_user is not None:
         uid = DB_user['uid']
+        delete_users_img(uid)
         dbConnect.deactivateUser(uid)
         session.clear()
         flash('退会処理が完了しました。またいつでも遊びにきてね！', 'flash ok')
@@ -188,21 +270,6 @@ def update_profile():
     email = DB_user["email"]
     profile_img = DB_user["profile_img"]
     return render_template('registration/update_profile.html', user_name=name, email=email, profile_img=profile_img)
-
-# プロフィール画像をDBに保存する関数
-def profile_img_save():
-    # 画像の保存先ディレクトリ
-    PROFILE_IMG_FOLDER = 'static/img/profile_img'
-    app.config[PROFILE_IMG_FOLDER] = PROFILE_IMG_FOLDER
-    profile_img = None
-    if 'profile_img' in request.files:
-        file = request.files['profile_img']
-        if file:
-            # 危険な文字を削除(サニタイズ処理)
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
-            profile_img = f"img/profile_img/{filename}"
-    return profile_img
 
 
 # アカウント変更処理
@@ -236,14 +303,18 @@ def update():
         password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
     else:
         password = DB_user["password"]
-    profile_img = profile_img_save()
+
+    profile_img = profile_img_save(template='/update_profile')
+    uid = DB_user['uid']
     if profile_img is None:
         user = DB_user
         profile_img = user['profile_img']
-
-    uid = DB_user['uid']
+    else:
+        # 更新があれば前の画像を削除
+        delete_img('profile', uid)
     dbConnect.updateUser(name, email, password, profile_img, uid)
     return redirect(url_for("home"))
+
 
 # ============================
 # チャットグループ機能
@@ -255,21 +326,18 @@ def index():
     time = handle_time()
     if time:
         return time
-
     DB_user = session_check()
     if DB_user is None:
         flash('もう一度ログインしてね！', 'flash ng')
         return render_template('registration/login.html')
- 
+
     profile_img = None
     profile_img = DB_user['profile_img']
-
     chat_groups = dbConnect.getGroupAll()
     chat_groups = list(chat_groups)
     chat_groups.reverse()
     for group in chat_groups:
         group['group_img'] = group['group_img']
-    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('group.html', groups=chat_groups, profile_img=profile_img)
 
 
@@ -279,31 +347,13 @@ def create_group():
     time = handle_time()
     if time:
         return time
-
     DB_user = session_check()
     if DB_user is None:
         flash('もう一度ログインしてね！', 'flash ng')
         return render_template('registration/login.html')
     profile_img = None
     profile_img = DB_user['profile_img']
-
     return render_template('create_group.html', profile_img=profile_img)
-
-
-# グループ画像をDBに保存する関数
-def group_img_save():
-    # 画像の保存先ディレクトリ
-    GROUP_IMG_FOLDER = 'static/img/group_img'
-    app.config[GROUP_IMG_FOLDER] = GROUP_IMG_FOLDER
-    group_img = None
-    if 'group_img' in request.files:
-        file = request.files['group_img']
-        if file:
-            # 危険な文字を削除(サニタイズ処理)
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
-            group_img = f"img/group_img/{filename}"
-    return group_img
 
 
 # チャットグループの追加
@@ -312,24 +362,26 @@ def add_chat_group():
     time = handle_time()
     if time:
         return time
-
     DB_user = session_check()
     if DB_user is None:
         flash('もう一度ログインしてね！', 'flash ng')
         return render_template('registration/login.html')
 
     action = request.form.get('action')
-    if action=='create-group':
+    if action == 'create-group':
         chat_group_name = request.form.get('group_name')
+        if chat_group_name == '':
+            flash('チャットグループの名前を付けてね！', 'flash caution')
+            return redirect('/create_group')
         chat_group = dbConnect.getGroupByName(chat_group_name)
-        group_img = group_img_save()
+        group_img = group_img_save(template='/create_group')
         if chat_group == None:
             uid = DB_user['uid']
             dbConnect.addGroup(uid, chat_group_name, group_img)
             return redirect('/groups')
         else:
             flash('同じ名前のチャットグループがもうあるみたいだよ！', 'flash ng')
-            return 'None'
+            return redirect('/create_group')
     return redirect('/groups')
 
 
@@ -348,15 +400,11 @@ def edit_group():
     cid = request.form.get('cid')
     profile_img = None
     profile_img = DB_user['profile_img']
-    # uid = session.get("uid")
-    # if uid is None:
-    #   return redirect('/process_login')
-
     group = dbConnect.getGroupById(cid)
     return render_template('edit_group.html',
-						cid=cid,
-                        group=group,
-                        profile_img=profile_img)
+                            cid=cid,
+                            group=group,
+                            profile_img=profile_img)
 
 
 # チャットグループの更新と削除
@@ -379,15 +427,18 @@ def update_chat_group():
     if action == 'update':
         chat_group_name = request.form.get('chat_groupTitle')
         # 画像の更新があれば
-        group_img = group_img_save()
-        # すでに画像があるなら
-        group = dbConnect.getGroupById(cid)
+        group_img = group_img_save(template='/edit_group')
+        # 変更前の画像があれば
+        old_file = dbConnect.getGroupById(cid)['group_img']
+        if old_file:
+            delete_img('group', cid)
         dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
     # 削除
     elif action == 'delete':
         chat_group = dbConnect.getGroupById(cid)
         if chat_group["uid"] != uid:
-          flash('チャットグループは作った人だけが削除できるよ！', 'flash ng')
+            flash('チャットグループは作った人だけが削除できるよ！', 'flash ng')
+        delete_img('group', cid)
         dbConnect.deleteGroup(cid)
     return redirect('/groups')
 
@@ -418,12 +469,12 @@ def message(cid):
         sender = dbConnect.getUserById(message['uid'])
         message['sender_name'] = sender['user_name']
     return render_template('chat.html',
-						user_name=user_name,
-						user_id=user_id,
-						profile_img=profile_img,
-						messages=messages,
-						group_name=group_name,
-						cid=cid)
+                            user_name=user_name,
+                            user_id=user_id,
+                            profile_img=profile_img,
+                            messages=messages,
+                            group_name=group_name,
+                            cid=cid)
 
 
 # メッセージの投稿

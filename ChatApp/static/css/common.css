@@ -5,6 +5,12 @@
     margin: 0;
     padding: 0;
 }
+
+body {
+    /* background: linear-gradient(to bottom, rgba(255, 255, 255),rgba(229, 255, 216),rgba(231, 255, 204),rgba(240, 255, 216),rgba(233, 255, 219),rgba(213, 255, 200)); */
+    background: #E9FFDB;
+}
+
 .container-wrap {
     margin: 0px auto;
     width: 100%;

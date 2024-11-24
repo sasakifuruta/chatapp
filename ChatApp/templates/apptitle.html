@@ -1,133 +1,69 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/apptitle.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="welcome-msg app-name">トモチャット
+    </h1>
+    <!-- 新規登録ボタンを押したらモーダル表示 -->
+    <button class="btn-black-short" type="button" id="js-signupModal-open">新規登録</button>
+    <button class="btn-white-short" type="button" id="js-loginModal-open">ログイン</button>
+</div>
+<!-- signup モーダル本体 -->
+<div class="modal" id="js-signupModal">
+    <div class="modal-container">
+        <!-- モーダルを閉じるボタン -->
+        <div class="modal-close" id="js-signupModal-close">✖️</div>
+        <!-- モーダル内部のコンテンツ -->
+        <div class="modal-content">
+            <div class="modal-text">
+                <h3>〜お知らせ〜</h3>
+                <p>時計が22時を指したら、
+                    何かがあなたを見ているかも…
+                    22時になったら寝ましょうね！
+                </p>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/common.css">
-    <link rel="stylesheet" href="../static/css/apptitle.css">
-    <title>トモチャット</title>
-</head>
-
-<body>
-    <div class="container-wrap">
-        <div class="container">
-            <h1 class="welcome-msg app-name">トモチャット
-            </h1>
-            <!-- 新規登録ボタンを押したらモーダル表示 -->
-            <button class="btn-black-short" type="button" id="js-signupModal-open">新規登録</button>
-            <button class="btn-white-short" type="button" id="js-loginModal-open">ログイン</button>
-        </div>
-        <!-- signup モーダル本体 -->
-        <div class="modal" id="js-signupModal">
-            <div class="modal-container">
-                <!-- モーダルを閉じるボタン -->
-                <div class="modal-close" id="js-signupModal-close">✖️</div>
-                <!-- モーダル内部のコンテンツ -->
-                <div class="modal-content">
-                    <div class="modal-text">
-                        <h3>〜お知らせ〜</h3>
-                        <p>時計が22時を指したら、
-                            何かがあなたを見ているかも…
-                            22時になったら寝ましょうね！
-                        </p>
-
-                        <div class="cont-btn">
-                            <form action="/next_step_s" method="post">
-                                <button type="submit">続ける</button>
-                            </form>
-                        </div>
-                    </div>
-                    <img src="../static/img/mom-kind.png" alt="" srcset="">
+                <div class="cont-btn">
+                    <form action="/next_step_s">
+                        <button type="submit">続ける</button>
+                    </form>
                 </div>
             </div>
+            <img src="../static/img/mom-kind.png" alt="" srcset="">
         </div>
-
-
-        <!-- login モーダル本体 -->
-        <div class="modal" id="js-loginModal">
-            <div class="modal-container">
-                <!-- モーダルを閉じるボタン -->
-                <div class="modal-close" id="js-loginModal-close">✖️</div>
-                <!-- モーダル内部のコンテンツ -->
-                <div class="modal-content">
-                    <div class="modal-text">
-                        <h3>〜お知らせ〜</h3>
-                        <p>時計が22時を指したら、
-                            何かがあなたを見ているかも…
-                            22時になったら寝ましょうね！
-                        </p>
-
-                        <div class="cont-btn">
-                            <form action="/next_step_l" method="post">
-                                <button type="submit">続ける</button>
-                            </form>
-                        </div>
-                    </div>
-                    <img src="../static/img/mom-kind.png" alt="" srcset="">
-                </div>
-            </div>
-        </div>
-
     </div>
+</div>
 
 
-    <script>
-        // ========================
-        // 新規登録ボタン モーダル
-        // ========================
-        // 要素を取得
-        const signupModal = document.getElementById('js-signupModal');
-        const signupModalOpen = document.getElementById('js-signupModal-open');
-        const signupModalClose = document.getElementById('js-signupModal-close');
+<!-- login モーダル本体 -->
+<div class="modal" id="js-loginModal">
+    <div class="modal-container">
+        <!-- モーダルを閉じるボタン -->
+        <div class="modal-close" id="js-loginModal-close">✖️</div>
+        <!-- モーダル内部のコンテンツ -->
+        <div class="modal-content">
+            <div class="modal-text">
+                <h3>〜お知らせ〜</h3>
+                <p>時計が22時を指したら、
+                    何かがあなたを見ているかも…
+                    22時になったら寝ましょうね！
+                </p>
 
-        // 「新規登録」ボタンをクリックしてモーダルを開く
-        function sModalOpen() {
-            signupModal.classList.add('is-active');
-        }
-        signupModalOpen.addEventListener('click', sModalOpen);
-        // 閉じるボタンをクリックしてモーダルを閉じる
-        function sModalClose() {
-            signupModal.classList.remove('is-active');
-        }
-        signupModalClose.addEventListener('click', sModalClose);
-        // モーダルの外側をクリックしてモーダルを閉じる
-        function sModalOut(e) {
-            if (e.target == signupModal) {
-                signupModal.classList.remove('is-active');
-            }
-        }
-        addEventListener('click', sModalOut);
+                <div class="cont-btn">
+                    <form action="/next_step_l">
+                        <button type="submit">続ける</button>
+                    </form>
+                </div>
+            </div>
+            <img src="../static/img/mom-kind.png" alt="" srcset="">
+        </div>
+    </div>
+</div>
 
+{% endblock %}
 
+{% block script %}
+    <script src="{{ url_for('static', filename='js/apptitle.js') }}" type="text/javascript"></script>
+{% endblock %}
 
-        // ========================
-        // ログインボタン モーダル
-        // ========================
-        // 要素を取得
-        const loginModal = document.getElementById('js-loginModal');
-        const loginModalOpen = document.getElementById('js-loginModal-open');
-        const loginModalClose = document.getElementById('js-loginModal-close');
-
-        // 「ログイン」ボタンをクリックしてモーダルを開く
-        function lModalOpen() {
-            loginModal.classList.add('is-active');
-        }
-        loginModalOpen.addEventListener('click', lModalOpen);
-        // 閉じるボタンをクリックしてモーダルを閉じる
-        function lModalClose() {
-            loginModal.classList.remove('is-active');
-        }
-        loginModalClose.addEventListener('click', lModalClose);
-        // モーダルの外側をクリックしてモーダルを閉じる
-        function lModalOut(e) {
-            if (e.target == loginModal) {
-                loginModal.classList.remove('is-active');
-            }
-        }
-        addEventListener('click', lModalOut);
-
-    </script>
-</body>
-
-</html>

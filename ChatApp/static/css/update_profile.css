@@ -1,4 +1,4 @@
-form {
+.container form {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
@@ -26,7 +26,7 @@ form {
 }
 
 .file_upload {
-    color: #FFF;
+    color: #E9FFDB;
 }
 
 .file_upload::file-selector-button {

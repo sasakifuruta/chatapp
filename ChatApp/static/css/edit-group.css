@@ -27,9 +27,6 @@
     border-radius: 50%;
     object-fit: cover;
 }
-#jsPreview {
-    display: none;
-}
 
 .default-icon {
     font-size: 6em;
@@ -42,7 +39,7 @@
 }
 
 .file_upload {
-    color: #FFF;
+    color: #E9FFDB;
 }
 
 .file_upload::file-selector-button {
