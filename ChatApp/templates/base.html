@@ -12,7 +12,10 @@
     <title>トモチャット</title>
 </head>
 <body>
-    {% include 'header.html' %}
+    {% block header %}
+    {% endblock %}
+
+    
     
     <!-- flashメッセージ始まり -->
     {% with messages = get_flashed_messages(with_categories=true) %}

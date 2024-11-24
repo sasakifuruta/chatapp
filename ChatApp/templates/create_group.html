@@ -3,6 +3,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create-group.css') }}">
     {% endblock %}
 {% block body %}
+    {% block header %}
+    {% include 'header.html' %}
+    {% endblock %}
 <p class="page_title"> グループ作成</p>
         <div class="container">
             <form action="/create_group" method="post" enctype="multipart/form-data">

@@ -1,76 +1,30 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/common.css">
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/disactive.css">
-    <!-- FontAwesomeのkit -->
-    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
-
-    <title>トモチャット</title>
-</head>
-
-<body>
-    <header>
-        <!-- ハンバーガーメニュー -->
-        <div class="hamburger-menu">
-            <input type="checkbox" id="menu-btn-check">
-            <label for="menu-btn-check" class="menu-btn"><span></span></label>
-            <!--ここから中身-->
-            <div class="menu-content">
-                <ul>
-                    <li>
-                        <a href="#">ホーム</a>
-                    </li>
-                    <li>
-                        <a href="#">グループ</a>
-                    </li>
-                    <li>
-                        <a href="#">アカウント</a>
-                    </li>
-                    <li>
-                        <a href="#">ログアウト</a>
-                    </li>
-                    <li>
-                        <a href="#">退会</a>
-                    </li>
-                </ul>
-            </div>
-            <!--ここまで中身-->
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/disactive.css') }}">
+    {% endblock %}
+{% block body %}
+    {% block header %}
+    {% include 'header.html' %}
+    {% endblock %}
+<p class="page_title">退会</p>
+<div class="container">
+    <div class="icon-name">
+        <div class="profile">
+            <label for="profile_img">
+                {% if profile_img %}
+                <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                {% else %}
+                <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+                {% endif %}
+            </label>
         </div>
-        <h2 class="header-top app-name">トモチャット</h2>
-    </header>
-
-    <div class="container-wrap">
-        <p class="page_title">退会</p>
-        <div class="container">
-            <div class="icon-name">
-                <div class="profile">
-                    <label for="profile_img">
-                        {% if profile_img %}
-                        <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
-                        {% else %}
-                        <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
-                        {% endif %}
-                    </label>
-                </div>
-            </div>
-
-            <div class="request_btn">
-                <form action="/withdrawal" method="post">
-                    <input type="hidden" name="uid" value="{{ uid }}">
-                    <button class="btn-black-long" type="submit">退会する</button>
-                </form>
-            </div>
-        </div>
-
     </div>
 
-
-
-</body>
-
-</html>
+    <div class="request_btn">
+        <form action="/withdrawal" method="post">
+            <input type="hidden" name="uid" value="{{ uid }}">
+            <button class="btn-black-long" type="submit">退会する</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

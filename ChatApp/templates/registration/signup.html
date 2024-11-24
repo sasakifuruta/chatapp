@@ -1,29 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../static/css/common.css">
-    <link rel="stylesheet" href="../../static/css/header.css">
-    <link rel="stylesheet" href="../../static/css/resister-login.css">
-    <script src="https://kit.fontawesome.com/f960b0de38.js" crossorigin="anonymous"></script>
-    <title>アカウント作成</title>
-</head>
-
-<body>
-    <!-- ヘッダー -->
-    <header>
-        <!-- 戻るボタン -->
-        <a class="return-link" onclick="history.back()">
-            <i class="fa-solid fa-chevron-left">
-            </i>
-        </a>
-        <h2 class="header-top app-name">トモチャット</h2>
-    </header>
-
-    <div class="container-wrap">
-        <p class="page_title">アカウント作成</p>
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resister-login.css') }}">
+    {% endblock %}
+{% block body %}
+    {% block header %}
+    {% include 'registration/header2.html' %}
+    {% endblock %}
+    <p class="page_title">アカウント作成</p>
         <div class="container">
             <form action="/process_signup" method="post">
                 <input type="text" name="user_name" id="" placeholder="ユーザー名">
@@ -34,10 +17,5 @@
             </form>
 
         </div>
-    </div>
+{% endblock %}
 
-
-
-</body>
-
-</html>
