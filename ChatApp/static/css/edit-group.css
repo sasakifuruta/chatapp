@@ -27,9 +27,6 @@
     border-radius: 50%;
     object-fit: cover;
 }
-#jsPreview {
-    display: none;
-}
 
 .default-icon {
     font-size: 6em;

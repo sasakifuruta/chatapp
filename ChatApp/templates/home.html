@@ -2,11 +2,10 @@
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     {% endblock %}
-{% block body %}
-    {% block header %}
-    {% include 'header-without-ava.html' %}
-    {% endblock %}
-
+{% block header %}
+{% include 'header-without-ava.html' %}
+{% endblock %}
+{% block content %}
     <div class="container">
         <div class="icon-name">
             <div class="profile">

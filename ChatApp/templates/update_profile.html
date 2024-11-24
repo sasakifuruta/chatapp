@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/update_profile.css') }}">
-    {% endblock %}
-{% block body %}
-    {% block header %}
+{% endblock %}
+
+{% block header %}
     {% include 'header-without-ava.html' %}
-    {% endblock %}
+{% endblock %}
+{% block content %}
 <p class="page_title">アカウント内容</p>
         <div class="container">
             <form action="/update_profile" method="post" enctype="multipart/form-data">
