@@ -25,7 +25,32 @@
                     {% endif %}
                 </label>
             </div>
+        <form action="/update_chat_group" method="post" enctype="multipart/form-data">
+            <div class="profile">
+                <input class="file_upload" id="file_upload" type="file" name="group_img"
+                    accept="image/png, image/jpeg, image/png" value="">
+                <label for="profile_img">
+                    {% if group.group_img %}
+                    <img src="{{ url_for('static', filename=group.group_img) }}">
+                    {% else %}
+                    <img id="jsPreview" src="">
+                    <i id="default-icon" class="default-icon fa-solid fa-people-group">
+                    </i>
+                    {% endif %}
+                </label>
+            </div>
 
+            <input type="text" name="chat_groupTitle" value="{{ group.name }}" class="group-input-text">
+            <input type="hidden" name="cid" value="{{ cid }}">
+            <div class="button-container">
+                <button class="btn-white-long" onclick="history.back()">戻る</button>
+                <button class="btn-black-long" type="submit" name="action" value="update">更新する</button>
+            </div>
+            <div class="del-btn-container">
+                <button class="btn-black-long" type="submit" name="action" value="delete">削除する</button>
+            </div>
+        </form>
+    </div>
             <input type="text" name="chat_groupTitle" value="{{ group.name }}" class="group-input-text">
             <input type="hidden" name="cid" value="{{ cid }}">
             <div class="button-container">
