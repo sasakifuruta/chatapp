@@ -31,7 +31,7 @@ def handle_time():
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
     # else:
-    return 'None'
+    return None
 
 
 # セッションを確認しアクティブなユーザを取得
@@ -49,7 +49,7 @@ def session_check():
 # home.htmlにアクセスするためのエンドポイントの指定
 @app.route("/home")
 def home():
-    uid = session.get['uid']
+    uid = session.get('uid')
     DB_user = dbConnect.getUserById(uid)
     profile_img = DB_user["profile_img"]
     return render_template("home.html", profile_img=profile_img)
@@ -62,9 +62,9 @@ def apptitle():
 
 
 # アカウント作成ページの表示
-@app.route('/next_step_s', methods=['POST'])
+@app.route('/next_step_s')
 def show_signup():
-    if handle_time() == 'None':
+    if handle_time() == None:
         return render_template('registration/signup.html')
     return handle_time()
 
@@ -106,9 +106,9 @@ def process_signup_form():
 
 
 # ログインページの表示
-@app.route('/next_step_l', methods=['POST'])
+@app.route('/next_step_l')
 def show_login():
-    if handle_time() == 'None':
+    if handle_time() == None:
         return render_template('registration/login.html')
     return handle_time()
 
@@ -175,24 +175,19 @@ def withdraw_account():
 # アカウント内容画面の表示
 @app.route('/update_profile')
 def update_profile():
-    # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-    # now_hour = now.hour
-    # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-    #   return render_template('anger-mon.html')
-    # else:
-    #   uid = session.get['uid']
-    #   DB_user = dbConnect.getUser(uid)
-    #   name = DB_user["name"]
-    #   email = DB_user["email"]
-    #   return render_template('update_profile.html', user_name=name, email=email)
-    # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUserById(uid)
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+
     name = DB_user["user_name"]
     email = DB_user["email"]
     profile_img = DB_user["profile_img"]
     return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
-
 
 # プロフィール画像をDBに保存する関数
 def profile_img_save():
@@ -218,10 +213,14 @@ def update():
     password1 = request.form.get('password')
     password2 = request.form.get('password_confirm')
 
-    # uid = session.get['uid']
-    # uid = 'c783a851-bf66-435f-9e98-647a85838f99'
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUserById(uid)
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
 
     if email != None:
         regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -229,22 +228,22 @@ def update():
             flash('メールアドレスの書き方がちょっと違うみたいだよ！', 'flash ng')
             return render_template('update_profile.html')
 
-    # if:ユーザーが入力した内容に対しての条件分岐
     if password1 != password2:
         flash('パスワードが同じじゃないみたいだよ！', 'flash ng')
         return render_template('update_profile.html')
+
     if password1:
         password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
     else:
         password = DB_user["password"]
     profile_img = profile_img_save()
     if profile_img is None:
-        user = dbConnect.getUserById(uid)
+        user = DB_user
         profile_img = user['profile_img']
 
+    uid = DB_user['uid']
     dbConnect.updateUser(name, email, password, profile_img, uid)
     return redirect(url_for("home"))
-
 
 # ============================
 # チャットグループ機能
@@ -253,12 +252,15 @@ def update():
 # チャットグループ一覧ページの表示
 @app.route('/groups')
 def index():
-    # uid = session.get("uid")
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    # if uid is None:
-    #     return redirect('/process_login')
-    # else:
-    DB_user = dbConnect.getUserById(uid)
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+ 
     profile_img = None
     profile_img = DB_user['profile_img']
 
@@ -274,15 +276,17 @@ def index():
 # チャットグループの追加画面の表示
 @app.route('/create_group')
 def create_group():
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUserById(uid)
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
     profile_img = None
     profile_img = DB_user['profile_img']
-    # uid = session.get("uid")
 
-    # if uid is None:
-    #     return redirect('/process_login')
-    # return render_template('group.html', chat_groups=chat_groups, uid=uid)
     return render_template('create_group.html', profile_img=profile_img)
 
 
@@ -305,16 +309,22 @@ def group_img_save():
 # チャットグループの追加
 @app.route('/create_group', methods=['POST'])
 def add_chat_group():
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    # uid = session.get('uid')
-	# if uid is None:
-	#     return redirect('/login')
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+
     action = request.form.get('action')
     if action=='create-group':
         chat_group_name = request.form.get('group_name')
         chat_group = dbConnect.getGroupByName(chat_group_name)
         group_img = group_img_save()
         if chat_group == None:
+            uid = DB_user['uid']
             dbConnect.addGroup(uid, chat_group_name, group_img)
             return redirect('/groups')
         else:
@@ -326,9 +336,16 @@ def add_chat_group():
 # チャットグループ編集画面の表示
 @app.route('/edit_group', methods=['POST'])
 def edit_group():
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+    
     cid = request.form.get('cid')
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUserById(uid)
     profile_img = None
     profile_img = DB_user['profile_img']
     # uid = session.get("uid")
@@ -345,15 +362,18 @@ def edit_group():
 # チャットグループの更新と削除
 @app.route('/update_chat_group', methods=['POST'])
 def update_chat_group():
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    if uid is None:
-        return redirect('/login')
-    # cid= 1
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+    
     action = request.form.get('action')
-    # uid = session.get("uid")
-    # if uid is None:
-    #     return redirect('/login')
     cid = request.form.get('cid')
+    uid = DB_user['uid']
 
     # 更新
     if action == 'update':
@@ -365,9 +385,9 @@ def update_chat_group():
         dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
     # 削除
     elif action == 'delete':
-        # chat_group = dbConnect.getGroupById(cid)
-        # if chat_group["uid"] != uid:
-        #   flash('チャットグループは作った人だけが削除できるよ！', 'flash ng')
+        chat_group = dbConnect.getGroupById(cid)
+        if chat_group["uid"] != uid:
+          flash('チャットグループは作った人だけが削除できるよ！', 'flash ng')
         dbConnect.deleteGroup(cid)
     return redirect('/groups')
 
@@ -379,11 +399,15 @@ def update_chat_group():
 # チャット画面表示
 @app.route('/group/<cid>')
 def message(cid):
-    # uid = session.get('uid')
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  # テスト用
-    DB_user = dbConnect.getUserById(uid)
-    # if DB_user is None:
-    #     return redirect('/login')
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+    
     profile_img = None
     profile_img = DB_user['profile_img']
     user_name = DB_user['user_name']
@@ -405,15 +429,19 @@ def message(cid):
 # メッセージの投稿
 @app.route('/post_message', methods=['POST'])
 def add_message():
-    # uid = session.get('uid')
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  # テスト用
-    DB_user = dbConnect.getUser(uid)
-    # if DB_user is None:
-    #     return redirect('/login')
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
 
     message = request.form.get('message')
     cid = request.form.get('cid')
     if message:
+        uid = DB_user['uid']
         dbConnect.createMessage(uid, cid, message)
     return redirect(f'/group/{cid}')
 
@@ -421,11 +449,15 @@ def add_message():
 # メッセージの更新と削除
 @app.route('/group/<cid>', methods=['POST'])
 def update_message(cid):
-    # uid = session.get('uid')
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'  # テスト用
-    DB_user = dbConnect.getUser(uid)
-    # if DB_user is None:
-    #     return redirect('/login')
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
+
     action = request.form.get('action')
     mid = request.form.get('mid')
     # 更新
