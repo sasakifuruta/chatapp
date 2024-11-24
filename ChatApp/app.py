@@ -235,7 +235,7 @@ def show_withdrawal():
         flash('もう一度ログインしてね！', 'flash ng')
         return render_template('registration/login.html')
     profile_img = DB_user["profile_img"]
-    return render_template('disactive.html', profile_img=profile_img)
+    return render_template('registration/disactive.html', profile_img=profile_img)
 
 
 # 退会処理
@@ -269,7 +269,7 @@ def update_profile():
     name = DB_user["user_name"]
     email = DB_user["email"]
     profile_img = DB_user["profile_img"]
-    return render_template('update_profile.html', user_name=name, email=email, profile_img=profile_img)
+    return render_template('registration/update_profile.html', user_name=name, email=email, profile_img=profile_img)
 
 
 # アカウント変更処理
@@ -293,11 +293,11 @@ def update():
         regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(regex, email):
             flash('メールアドレスの書き方がちょっと違うみたいだよ！', 'flash ng')
-            return render_template('update_profile.html')
+            return render_template('registration/update_profile.html')
 
     if password1 != password2:
         flash('パスワードが同じじゃないみたいだよ！', 'flash ng')
-        return render_template('update_profile.html')
+        return render_template('registration/update_profile.html')
 
     if password1:
         password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
