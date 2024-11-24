@@ -29,21 +29,17 @@ def handle_time():
     now_hour = now.hour
     if (2 <= now_hour < 6):  # テスト
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-        # return render_template(nighttime='anger-mon.html')
         return render_template('anger-mon.html')
     # else:
     return 'None'
-    # return render_template(daytime)
 
 
 # セッションを確認しアクティブなユーザを取得
 def session_check():
     uid = session.get('uid')
     if uid is None:
-        return render_template('registration/login.html')
-    else:
-        DB_user = dbConnect.getUserById(uid)
-        return DB_user
+        return None 
+    return dbConnect.getUserById(uid)
 
 
 # ============================
@@ -53,8 +49,7 @@ def session_check():
 # home.htmlにアクセスするためのエンドポイントの指定
 @app.route("/home")
 def home():
-    # uid = session.get['uid']
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
+    uid = session.get['uid']
     DB_user = dbConnect.getUserById(uid)
     profile_img = DB_user["profile_img"]
     return render_template("home.html", profile_img=profile_img)
@@ -66,21 +61,7 @@ def apptitle():
     return render_template("apptitle.html")
 
 
-# アカウント作成
-# アプリタイトル画面の新規登録ボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_s'とした）を押した際の処理を以下に実装。
-# return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-# @app.route('/next_step_s', methods=['POST'])
-# def show_signup():
-#   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-#   # now_hour = now.hour
-#   # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-#   #   return render_template('anger-mon.html')
-#   # else:
-#   #   return render_template('registration/signup.html')
-#   return render_template('registration/signup.html')
-
-
-# アカウント作成 >> handle_time関数を適用
+# アカウント作成ページの表示
 @app.route('/next_step_s', methods=['POST'])
 def show_signup():
     if handle_time() == 'None':
@@ -88,7 +69,7 @@ def show_signup():
     return handle_time()
 
 
-# 利用時間内だった場合の処理（新規登録の処理）新規登録html画面の登録ボタンを'/process_signup'としている。
+# アカウント作成処理
 @app.route('/process_signup', methods=['POST'])
 # 登録フォームに入力された値を変数に格納
 def process_signup_form():
@@ -107,9 +88,7 @@ def process_signup_form():
         flash('メールアドレスの書き方がちょっと違うみたいだよ！', 'flash ng')
     elif password1 != password2:
         flash('パスワードが同じじゃないみたいだよ！', 'flash ng')
-    # elif パスワードの強度判定
     else:
-        # PWをハッシュ化。まだ脆弱性あり。
         uid = uuid.uuid4()
         password = hashlib.sha256(password1.encode('utf-8')).hexdigest()
         # emailをキーにDBを検索
@@ -127,19 +106,6 @@ def process_signup_form():
 
 
 # ログインページの表示
-# アプリタイトル画面のログインボタンを押すと、優母モーダル画面が表示される。その画面の「続ける」ボタン（エンドポイント'/next_step_l'とした）を押した際の処理を以下に実装。
-# return：新規登録画面htmlを返す。ここで、22時以降か前かの判断を実装する予定。
-# @app.route('/next_step_l', methods=['POST'])
-# def show_login():
-#   # now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-#   # now_hour = now.hour
-#   # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
-#   #   return render_template('anger-mon.html')
-#   # else:
-#   #   return render_template('registration/login.html')
-#   return render_template('registration/login.html')
-
-# ログインページの表示 >> handle_time関数を適用
 @app.route('/next_step_l', methods=['POST'])
 def show_login():
     if handle_time() == 'None':
@@ -147,7 +113,7 @@ def show_login():
     return handle_time()
 
 
-# 利用時間内だった場合の処理（ログインの処理）ログインhtml画面のログインボタンを'/process_login'としている。
+# ログインの処理
 @app.route('/process_login', methods=['POST'])
 # 登録フォームに入力された値を変数に格納
 def process_login_form():
@@ -183,34 +149,27 @@ def logout():
 # 退会ページの表示
 @app.route('/withdrawal')
 def show_withdrawal():
-    # uid = session.get['uid']
-    uid = '970af84c-dd40-47ff-af23-282b72b7cca8'
-    DB_user = dbConnect.getUserById(uid)
+    DB_user = session_check()
+    if DB_user is None:
+        flash('もう一度ログインしてね！', 'flash ng')
+        return render_template('registration/login.html')
     profile_img = DB_user["profile_img"]
     return render_template('disactive.html', profile_img=profile_img)
 
+
 # 退会処理
-@app.route('/withdrawal')
+@app.route('/withdrawal', methods=['POST'])
 def withdraw_account():
-    if not session.get('uid'):
-        flash('ログインしてね！', 'flash caution')
-        # print("セッションにuidが存在しません")
-        return redirect('next_step_l')
+    DB_user = session_check()
+    if DB_user is not None:
+        uid = DB_user['uid']
+        dbConnect.deactivateUser(uid)
+        session.clear()
+        flash('退会処理が完了しました。またいつでも遊びにきてね！', 'flash ok')
+        return redirect(url_for("apptitle"))
     else:
-        uid = session['uid']
-        DB_user = dbConnect.getUser(uid)
-        if DB_user != None:
-            dbConnect.deactivateUser(uid)
-            session.clear()
-            # print('退会完了です')
-            flash('退会処理が完了しました。またいつでも遊びにきてね！', 'flash ok')
-            return redirect(url_for("apptitle"))
-        else:
-            flash('退会できませんでした。もう一度やってみてね！', 'flash ng')
-            # print('退会失敗です')
-            return redirect('/withdrawal')  # とりあえず退会画面にリダイレクト。
-            # 処理が失敗した場合、何が問題だったのか、ユーザーにもっとわかりやすく伝えたほうがいいと思う。
-    # return redirect('/withdrawal')
+        flash('退会できませんでした。もう一度ログインしてみてね！', 'flash ng')
+        return render_template('registration/login.html')
 
 
 # アカウント内容画面の表示
