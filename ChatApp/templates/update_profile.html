@@ -15,9 +15,11 @@
                     <input class="file_upload" id="file_upload" type="file" name="profile_img" accept="image/png, image/jpeg, image/png">
                     <label for="profile_img">
                         {% if profile_img %}
-                            <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                        <img id="jsPreview" src="{{ url_for('static', filename=profile_img) }}">
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group" style="display: none;"></i>
                         {% else %}
-                            <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+                        <img id="jsPreview" src="" style="display: none;">
+                        <i id="default-icon" class="default-icon fa-solid fa-circle-user"></i>
                         {% endif %}
                     </label>
                 </div>
