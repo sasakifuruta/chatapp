@@ -387,6 +387,7 @@ def update():
     dbConnect.updateUser(name, email, password, profile_img, uid)
     return redirect(url_for("home"))
 
+
 # ============================
 # チャットグループ機能
 # ============================
