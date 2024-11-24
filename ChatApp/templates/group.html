@@ -2,11 +2,11 @@
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/group.css') }}">
 {% endblock %}
-
-{% block body %}
-    {% block header %}
+{% block header %}
     {% include 'header.html' %}
-    {% endblock %}
+{% endblock %}
+{% block body %}
+    
 <p class="page_title">グループ一覧</p>
         <div class="container">
             <div class="groups">

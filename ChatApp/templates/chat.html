@@ -2,10 +2,11 @@
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
     {% endblock %}
-{% block body %}
-    {% block header %}
+{% block header %}
     {% include 'header.html' %}
-    {% endblock %}
+{% endblock %}
+{% block body %}
+    
 <div class="container">
     <!-- 送信日時が古いものを上、新しいものを下に表示 -->
     {% for message in messages %}
