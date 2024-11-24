@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resister-login.css') }}">
-    {% endblock %}
-{% block body %}
-    {% block header %}
+{% endblock %}
+{% block header %}
     {% include 'registration/header2.html' %}
-    {% endblock %}
+{% endblock %}
+{% block body %}
     <p class="page_title">アカウント作成</p>
         <div class="container">
             <form action="/process_signup" method="post">

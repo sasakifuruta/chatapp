@@ -29,13 +29,4 @@
         <!--ここまで中身-->
     </div>
     <h2 class="header-top app-name">トモチャット</h2>
-    <div class="avatar">
-        {% if profile_img %}
-        <!-- プロフィール画像 -->
-        <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
-        {% else %}
-        <!-- 人型アイコン -->
-        <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
-        {% endif %}
-    </div>
 </header>

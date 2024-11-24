@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resister-login.css') }}">
-    {% endblock %}
-{% block body %}
+{% endblock %}
     {% block header %}
-    {% include 'registration/header2.html' %}
+        {% include 'registration/header2.html' %}
     {% endblock %}
+
+{% block content %}
     <p class="page_title">ログイン</p>
         <div class="container">
             <form action="/process_login" method="post">
@@ -13,6 +14,5 @@
                 <input type="password" name="password" id="" placeholder="パスワード">
                 <button class="btn-black-long" type="submit">ログイン</button>
             </form>
-
         </div>
 {% endblock %}

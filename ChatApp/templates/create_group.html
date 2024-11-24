@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/create-group.css') }}">
-    {% endblock %}
-{% block body %}
-    {% block header %}
+{% endblock %}
+
+{% block header %}
     {% include 'header.html' %}
-    {% endblock %}
+{% endblock %}
+
+{% block content %}
 <p class="page_title"> グループ作成</p>
         <div class="container">
             <form action="/create_group" method="post" enctype="multipart/form-data">
@@ -19,7 +21,6 @@
                         </i>
                     </label>
                 </div>
-
                 <input name="group_name" type="text" value="" placeholder="グループ名を入力してください" class="group-input-text">
                 <div class="button-container">
                     <button class="btn-white-long" onclick="history.back()">戻る</button>
