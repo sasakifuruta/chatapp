@@ -39,15 +39,4 @@
     </div>
 </header>
 
-<script>
-    // メニュー外をクリックしたらハンバーガーメニューを閉じる
-    document.addEventListener('click', (event)=>{
-        const menuCheck = document.getElementById('menu-btn-check');
-        const menuContent = document.getElementById('js-menuContent');
-        const menuBtn = document.getElementById('js-menuBtn');
-        
-        if (!menuCheck.contains(event.target) && !menuContent.contains(event.target) && !menuBtn.contains(event.target)){
-            menuCheck.checked = false;
-        }
-    });
-</script>
+<script src="../static/js/humburger.js"></script>

@@ -1,11 +1,10 @@
 <header>
     <!-- ハンバーガーメニュー -->
-    <div id="box"></div>
     <div class="hamburger-menu">
-        <input type="checkbox" id="menu-btn-check">
-        <label for="menu-btn-check" class="menu-btn"><span></span></label>
+        <input type="checkbox" id="menu-btn-check" id="menu-btn-check">
+        <label for="menu-btn-check" class="menu-btn" id="js-menuBtn"><span></span></label>
         <!--ここから中身-->
-        <div class="menu-content">
+        <div class="menu-content" id="js-menuContent">
             <ul>
                 <li>
                     <a href="{{ url_for('home') }}">ホーム</a>
@@ -30,3 +29,5 @@
     </div>
     <h2 class="header-top app-name">トモチャット</h2>
 </header>
+
+<script src="../static/js/humburger.js"></script>
