@@ -27,7 +27,7 @@ app.permanent_session_lifetime = timedelta(days=30)
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
-    if (22 <= now_hour < 24):  # テスト
+    if (23 <= now_hour < 24) or (0 <= now_hour < 6):  # テスト
         print(f'now_hour{now_hour}')
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
