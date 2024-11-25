@@ -39,7 +39,7 @@
 }
 
 .file_upload {
-    color: #FFF;
+    width: 0px;
 }
 
 .file_upload::file-selector-button {
