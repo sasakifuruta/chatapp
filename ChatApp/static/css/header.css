@@ -63,7 +63,7 @@ header {
 
 /* ハンバーガーメニューの中身 */
 .menu-content {
-    width: 80%;
+    width: 50%;
     height: 100%;
     position: fixed;
     top: 20;
@@ -76,7 +76,7 @@ header {
 }
 
 #menu-btn-check:checked~.menu-content {
-    right: 20%;
+    right: 50%;
     /*メニューを画面内へ*/
 }
 
