@@ -189,9 +189,14 @@ def process_signup_form():
 # ログインページの表示
 @app.route('/next_step_l')
 def show_login():
-    if handle_time() == None:
+    time = handle_time()
+    if time:
+        return time
+
+    DB_user = session_check()
+    if DB_user is None:
         return render_template('registration/login.html')
-    return handle_time()
+    return redirect(url_for('home'))
 
 
 # ログインの処理
