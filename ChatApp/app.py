@@ -27,7 +27,8 @@ app.permanent_session_lifetime = timedelta(days=30)
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
-    if (2 <= now_hour < 6):  # テスト
+    if (22 <= now_hour < 24):  # テスト
+        print(f'now_hour{now_hour}')
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
     # else:
@@ -191,6 +192,7 @@ def process_signup_form():
 @app.route('/next_step_l')
 def show_login():
     time = handle_time()
+    print(f'time{time}')
     if time:
         return time
 
@@ -432,11 +434,12 @@ def update_chat_group():
     # 更新
     if action == 'update':
         chat_group_name = request.form.get('chat_groupTitle')
-        # 画像の更新があれば
+        # 画像の更新があれば保存
         group_img = group_img_save(template='/edit_group')
-        # 変更前の画像があれば
+        # 変更前の画像
         old_file = dbConnect.getGroupById(cid)['group_img']
-        if old_file:
+        # 画像の更新があるなら、変更前の画像を削除
+        if group_img and old_file:
             delete_img('group', cid)
         dbConnect.updateGroup(uid, chat_group_name, group_img, cid)
     # 削除
@@ -527,16 +530,6 @@ def update_message(cid):
         if mid:
             dbConnect.deleteMessage(mid)
     return redirect(f'/group/{cid}')
-
-
-# # エラーページの表示
-# @app.errorhandler(404)
-# def show_error404(error):
-#     return render_template('error/404.html'),404
-
-# @app.errorhandler(500)
-# def show_error500(error):
-#     return render_template('error/500.html'),500
 
 
 if __name__ == '__main__':

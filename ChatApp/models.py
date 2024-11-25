@@ -51,7 +51,6 @@ class dbConnect:
             user = cur.fetchone()
             return user
         except Exception as e:
-            print('getUserById')
             print(f'エラーが発生しています: {e}')
             abort(500)
         finally:
@@ -86,7 +85,6 @@ class dbConnect:
             cur.execute(sql, (uid,))
             conn.commit()
         except Exception as e:
-            print('deactivateUser')
             print(f'エラーが発生しています: {e}')
             abort(500)
         finally:
