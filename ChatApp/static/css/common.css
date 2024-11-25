@@ -18,7 +18,7 @@ body {
 
 /* ボタンのスタイル↓↓ */
 .btn-black-short {
-    width: 160px;
+    width: 120px;
     background-color: black;
     color: white;
     border-radius: 6px;
@@ -26,7 +26,7 @@ body {
     
 }
 .btn-white-short{
-    width: 160px;
+    width: 120px;
     background-color: white;
     color: black;
     font-weight: bold;
