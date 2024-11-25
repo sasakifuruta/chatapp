@@ -132,7 +132,8 @@ def delete_users_img(uid):
 def home():
     uid = session.get('uid')
     DB_user = dbConnect.getUserById(uid)
-    profile_img = DB_user["profile_img"]
+    if DB_user:
+        profile_img = DB_user["profile_img"]
     return render_template("home.html", profile_img=profile_img)
 
 
@@ -309,7 +310,7 @@ def update():
     else:
         password = DB_user["password"]
 
-    profile_img = profile_img_save(template='/update_profile')
+    profile_img = profile_img_save(template='update_profile')
     uid = DB_user['uid']
     if profile_img is None:
         user = DB_user
