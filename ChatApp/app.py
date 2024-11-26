@@ -27,13 +27,10 @@ app.permanent_session_lifetime = timedelta(days=30)
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
-    if (22 <= now_hour < 24):  # テスト
-        print(f'now_hour{now_hour}')
+    if (23 <= now_hour < 24):  # テスト
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
-    # else:
     return None
-    # return render_template(daytime)
 
 
 # セッションを確認しアクティブなユーザを取得
@@ -72,7 +69,7 @@ def profile_img_save(template):
         file = request.files['profile_img']
         if file:
             filename = generate_filename(file)
-            # 拡張子が画像でない場合　
+            # 拡張子が画像でない場合
             if filename == 'Not img':
                 return redirect(url_for(template))
             file.save(os.path.join(app.config[PROFILE_IMG_FOLDER], filename))
@@ -90,7 +87,7 @@ def group_img_save(template):
         file = request.files['group_img']
         if file:
             filename = generate_filename(file)
-            # 拡張子が画像でない場合　
+            # 拡張子が画像でない場合
             if filename == 'Not img':
                 return redirect(url_for(template))
             file.save(os.path.join(app.config[GROUP_IMG_FOLDER], filename))
@@ -106,21 +103,17 @@ def delete_img(category, id):
         img_path = dbConnect.getGroupById(id)['group_img']
     if os.path.exists(f'static/{img_path}'):
         os.remove(f'static/{img_path}')
-        print(f'img_path>>{img_path}')
     return 'delete_img OK'
 
 
 # 退会した人の画像をフォルダから削除する
 def delete_users_img(uid):
     profile_img = dbConnect.getUserById(uid)['profile_img']
-    print(f'プロフィール写真を削除>>{profile_img}')
-    print(f'static/{profile_img}')
     os.remove(f'static/{profile_img}')
     users_group_images = dbConnect.getGroupAllByCreateUer(uid)
     for group_image in users_group_images:
         if os.path.exists(f'static/{group_image}'):
             os.remove(f'static/{group_image}')
-        print(f'グループ写真を削除>>{group_image}')
     return 'delete_img OK'
 
 
@@ -192,7 +185,6 @@ def process_signup_form():
 @app.route('/next_step_l')
 def show_login():
     time = handle_time()
-    print(f'time{time}')
     if time:
         return time
 
