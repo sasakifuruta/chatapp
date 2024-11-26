@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create-group.css') }}">
+{% endblock %}
+
+{% block header %}
+    {% include 'header.html' %}
+{% endblock %}
+
+{% block content %}
+<p class="page_title"> グループ作成</p>
+        <div class="container">
+            <form action="/create_group" method="post" enctype="multipart/form-data">
+                <!--編集ボタン-->
+                <div class="profile">
+                    <input class="file_upload" id="file_upload" type="file" name="group_img"
+                        accept="image/png, image/jpeg, image/png">
+                    <label for="profile_img">
+                        <img id="jsPreview" src="">
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group">
+                        </i>
+                    </label>
+                </div>
+                <input name="group_name" type="text" value="" placeholder="グループ名を入力してください" class="group-input-text">
+                <div class="button-container">
+                    <button class="btn-white-long" onclick="history.back()">戻る</button>
+                    <button type="submit" class="btn-black-long" name="action" value="create-group">作成する</button>
+                </div>
+            </form>
+        </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='js/img-prev.js') }}" type="text/javascript"></script>
+{% endblock %}

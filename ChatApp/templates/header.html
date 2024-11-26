@@ -1,0 +1,42 @@
+<header>
+    <!-- ハンバーガーメニュー -->
+    <div class="hamburger-menu">
+        <input type="checkbox" id="menu-btn-check">
+        <label for="menu-btn-check" class="menu-btn" id="js-menuBtn"><span></span></label>
+        <!--ここから中身-->
+        <div class="menu-content" id="js-menuContent">
+            <ul>
+                <li>
+                    <a href="{{ url_for('home') }}">ホーム</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('index') }}">グループ</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('update_profile') }}">アカウント</a>
+                </li>
+                <li>
+                    <form action="/logout" method="post">
+                        <button type="submit">ログアウト</button>
+                    </form>
+                </li>
+                <li>
+                    <a href="{{ url_for('show_withdrawal') }}">退会</a>
+                </li>
+            </ul>
+        </div>
+        <!--ここまで中身-->
+    </div>
+    <h2 class="header-top app-name">トモチャット</h2>
+    <div class="avatar">
+        {% if profile_img %}
+        <!-- プロフィール画像 -->
+        <img class="profile" src="{{ url_for('static', filename=profile_img) }}">
+        {% else %}
+        <!-- 人型アイコン -->
+        <i class="default-icon" class="default-icon fa-solid fa-circle-user"></i>
+        {% endif %}
+    </div>
+</header>
+
+<script src="../static/js/humburger.js"></script>

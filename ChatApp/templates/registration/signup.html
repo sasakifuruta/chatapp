@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resister-login.css') }}">
+{% endblock %}
+{% block header %}
+    {% include 'registration/header2.html' %}
+{% endblock %}
+{% block content %}
+    <p class="page_title">アカウント作成</p>
+        <div class="container">
+            <form action="/process_signup" method="post">
+                <input type="text" name="user_name" id="" placeholder="ユーザー名">
+                <input type="email" name="email" id="" placeholder="メールアドレス">
+                <input type="password" name="password" id="" placeholder="パスワード">
+                <input type="password" name="password_confirm" id="" placeholder="パスワード確認">
+                <button class="btn-black-long" type="submit">登録</button>
+            </form>
+        </div>
+{% endblock %}
+

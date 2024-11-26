@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anger-mom.css') }}">
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div>
+            <h3>寝ましょう</h3>
+            <p>6時まで操作できません</p>
+        </div>
+
+        <img src="{{ url_for('static', filename='img/mom-ang.png') }}" alt="anger-mom">
+    </div>
+{% endblock %}
+
+

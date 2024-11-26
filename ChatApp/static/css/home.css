@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.icon-name {
+    text-align: center;
+}
+
+/* プロフィール画像 */
+.profile {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+.profile img{
+    width: 100%;
+    height: 100%;
+    border: 2px solid #000;
+    border-radius: 50%;
+    object-fit: cover;
+    
+}
+/* デフォルトアイコン */
+.default-icon {
+    font-size: 8em;
+    color: #2b5a56;
+}
+
+.user_name {
+    font-size: 22px;
+}

@@ -1,0 +1,117 @@
+.container {
+    /* width: 80%; */
+    padding: 120px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    gap: 40px;
+}
+.welcome-msg{
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+
+/* モーダル関連 */
+/* モーダルと背景 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: rgba(0,0,0,50%);
+    padding: 40px 20px;
+    overflow: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+    box-sizing: border-box;
+}
+
+/* モーダルの擬似要素の指定 */
+.modal:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+/* クラスが追加された時 */
+.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* モーダル内部の指定 */
+.modal-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 600px;
+    width: 90%;
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+/* モーダルを閉じるボタン */
+.modal-close {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2px;
+    right: 8px;
+    color: #000;
+    font-size: 25px;
+    /* background-color: #000; */
+    cursor: pointer;
+}
+
+.modal-content {
+    max-width: 600px;
+
+}
+.modal-content img {
+    max-width: 250px;
+    border-radius: 20px;
+    margin-top: 15px;
+}
+
+.modal-content h3 {
+    font-size: 1.8em;
+    padding: 20px;
+}
+.modal-content p{
+    text-align: start;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    padding: 10px 42px;
+}
+.modal-content .cont-btn button{
+    border: none;
+    background: none;
+    font-size: 1.2em;
+}
+.modal-content .cont-btn button:hover {
+    text-decoration: underline;
+}
+
+@media screen and (min-width:768px){
+    .modal-content {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    .modal-text {
+        padding: 30px 20px;
+    }
+
+    
+}
+
+
+
+

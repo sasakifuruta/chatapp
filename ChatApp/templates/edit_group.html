@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit-group.css') }}">
+{% endblock %}
+
+{% block header %}
+    {% include 'header.html' %}
+{% endblock %}
+
+{% block content %}
+    <p class="page_title"> グループ編集</p>
+    <div class="container">
+
+        <form action="/update_chat_group" method="post" enctype="multipart/form-data">
+            <div class="profile">
+                <input class="file_upload" id="file_upload" type="file" name="group_img"
+                    accept="image/png, image/jpeg, image/png" value="">
+                <label for="profile_img">
+                    {% if group.group_img %}
+                        <img id="jsPreview" src="{{ url_for('static', filename=group.group_img) }}">
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group" style="display: none;"></i>
+                        {% else %}
+                        <img id="jsPreview" src="" style="display: none;">
+                        <i id="default-icon" class="default-icon fa-solid fa-people-group"></i>
+                        {% endif %}
+                </label>
+            </div>
+            <input type="text" name="chat_groupTitle" value="{{ group.name }}" class="group-input-text">
+            <input type="hidden" name="cid" value="{{ cid }}">
+            <div class="button-container">
+                <button class="btn-white-short" onclick="history.back()">戻る</button>
+                <button class="btn-black-short" type="submit" name="action" value="delete">削除する</button>
+            </div>
+            <div class="del-btn-container">
+                <button class="btn-black-short" type="submit" name="action" value="update">更新する</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='js/img-prev.js') }}" type="text/javascript"></script>
+{% endblock %}

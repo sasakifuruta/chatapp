@@ -1,0 +1,173 @@
+header {
+    background-color: #ffffff;
+    display: flex;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+}
+
+/* ハンバーガーメニューのボタン */
+.menu-btn {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    justify-content: center;
+    align-items: center;
+    z-index: 90;
+    background-color: #E9FFDB;
+}
+
+.menu-btn span,
+.menu-btn span:before,
+.menu-btn span:after {
+    content: '';
+    display: block;
+    height: 3px;
+    width: 25px;
+    border-radius: 3px;
+    background-color: #000;
+    position: absolute;
+}
+
+.menu-btn span:before {
+    bottom: 8px;
+}
+
+.menu-btn span:after {
+    top: 8px;
+}
+
+#menu-btn-check:checked~.menu-btn {
+    background-color: #D5FFC8;
+}
+
+#menu-btn-check:checked~.menu-btn span {
+    background-color: rgba(255, 255, 255, 0);
+    /*メニューオープン時は真ん中の線を透明にする*/
+}
+
+#menu-btn-check:checked~.menu-btn span::before {
+    bottom: 0;
+    transform: rotate(45deg);
+}
+
+#menu-btn-check:checked~.menu-btn span::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+#menu-btn-check {
+    display: none;
+}
+
+
+/* ハンバーガーメニューの中身 */
+.menu-content {
+    width: 50%;
+    height: 100%;
+    position: fixed;
+    top: 20;
+    right: 100%;
+    /*leftの値を変更してメニューを画面外へ*/
+    z-index: 1000;
+    background-color: #D5FFC8;
+    transition: all 0.5s;
+    /*アニメーション設定*/
+}
+
+#menu-btn-check:checked~.menu-content {
+    right: 50%;
+    /*メニューを画面内へ*/
+}
+
+.menu-content ul {
+    padding: 70px 10px 0;
+}
+
+.menu-content ul li {
+    border-bottom: solid 1px #ffffff;
+    list-style: none;
+}
+
+.menu-content ul li a{
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    box-sizing: border-box;
+    color: #000;
+    text-decoration: none;
+    padding: 9px 15px 10px 0;
+    position: relative;
+}
+
+.menu-content ul button {
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: #000;
+    padding: 9px 15px 10px 0;
+}
+.menu-content ul form{
+    position: relative;
+}
+
+.menu-content ul li a::before,
+.menu-content ul form::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-top: solid 2px #ffffff;
+    border-right: solid 2px #ffffff;
+    transform: rotate(45deg);
+    position: absolute;
+    right: 11px;
+    top: 16px;
+}
+/* ハンバーガーメニュー終わり */
+
+/* ヘッダーのアプリ名の位置 */
+.header-top {
+    width: calc(100% - (46px + 30px));
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
+}
+
+/* 戻るボタン */
+.return-link {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+/* アイコン */
+.avatar {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: end;
+    padding-top: 4px;
+
+}
+
+.avatar .default-icon {
+    font-size: 40px;
+    color: rgb(75, 140, 40);
+    text-decoration: none;
+}
+
+.avatar .profile {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border: 1px #000 solid;
+}

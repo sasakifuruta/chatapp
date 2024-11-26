@@ -1,0 +1,68 @@
+.container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* プロフィール画像 */
+.profile {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+.profile img{
+    width: 100%;
+    height: 100%;
+    border: 2px solid #000;
+    border-radius: 50%;
+    object-fit: cover;
+    
+}
+.default-icon {
+    font-size: 8em;
+    color: #2b5a56;
+}
+
+.file_upload {
+    width: 0px;
+}
+
+.file_upload::file-selector-button {
+    position: absolute;
+    top: 70%;
+    left: 53%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    background: rgba(240, 241, 242, 0.7);
+    border: none;
+}
+
+
+/* プロフィール画像おわり */
+
+
+.input-area {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-area input{
+    display: block;
+    height: 40px;
+    border:  solid 1px #000;
+    font-size: 14px;
+}
+
+.buttons {
+    display: grid;
+    grid-auto-columns: 2fr;
+    grid-auto-flow: column;
+    gap: 3em;
+    width: fit-content;
+}
+.buttons button {
+    width: 120px;
+}

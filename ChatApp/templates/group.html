@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/group.css') }}">
+{% endblock %}
+
+    {% block header %}
+    {% include 'header.html' %}
+    {% endblock %}
+
+{% block content %}
+<p class="page_title">グループ一覧</p>
+        <div class="container">
+            <div class="groups">
+                {% for group in groups %}
+                <div class="group">
+                    <div class="group-img">
+                        <form action="/edit_group" method="post">
+                            <button class="btn-edit-group" type="submit">
+                                <input type="hidden" name="cid" value="{{ group.id }}">
+                                {% if group.group_img %}
+                                <img src="{{ url_for('static', filename=group.group_img) }}">
+                                {% else %}
+                                <i id="default-icon" class="default-icon fa-solid fa-people-group">
+                                </i>
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                    <!-- チャンネル名 -->
+                    <a href="{{ url_for('message', cid=group.id) }}" class="group-name-wrap">
+                        <p class="group-name">{{ group.name }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="group-footer">
+            <!-- ＋ボタン -->
+            <form action="/create_group" method="get">
+                <button class="btn-create-group" type="submit">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+        </div>
+{% endblock %}
