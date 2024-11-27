@@ -468,6 +468,8 @@ def message(cid):
     messages = dbConnect.getMessageAll(cid)
     for message in messages:
         sender = dbConnect.getUserById(message['uid'])
+        if sender == None:
+            sender = dbConnect.getUserDisactive(message['uid'])
         message['sender_name'] = sender['user_name']
         message['profile_img'] = sender['profile_img']
     return render_template('chat.html',

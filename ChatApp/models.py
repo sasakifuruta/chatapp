@@ -56,6 +56,24 @@ class dbConnect:
         finally:
             cur.close()
             conn.close()
+            
+            
+    # 退会ユーザを取得
+    @staticmethod
+    def getUserDisactive(uid):
+        try:
+            conn = DB.getConnection()
+            cur = conn.cursor()
+            sql = "SELECT * FROM users WHERE uid = %s AND is_active = 0;"
+            cur.execute(sql, (uid,))
+            user = cur.fetchone()
+            return user
+        except Exception as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            cur.close()
+            conn.close()
 
     
     # アカウント・プロフィール画像編集
