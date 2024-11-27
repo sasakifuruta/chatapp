@@ -47,7 +47,16 @@
                 {% else %}
                 <!-- 他の誰かが受信したメッセージ -->
                 <div class="msgs-area left">
-                    <figure class="icon-img"><i class="user-avatar fa-regular fa-circle-user"></i>
+                    <figure class="icon-img">
+                        <div class="avatar">
+                            {% if message.profile_img %}
+                            <!-- プロフィール画像 -->
+                            <img class="user-avatar profile" src="{{ url_for('static', filename= message.profile_img) }}">
+                            {% else %}
+                            <!-- 人型アイコン -->
+                            <i class="user-avatar default-icon fa-solid fa-circle-user"></i>
+                            {% endif %}
+                        </div>
                         <figcaption class="icon-name">{{ message.sender_name }}</figcaption>
                     </figure>
                     <div class="chatting">

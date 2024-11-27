@@ -27,7 +27,7 @@ app.permanent_session_lifetime = timedelta(days=30)
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
-    if (23 <= now_hour < 24):  # テスト
+    if (1 <= now_hour < 6):  # テスト
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
     return None
@@ -469,6 +469,7 @@ def message(cid):
     for message in messages:
         sender = dbConnect.getUserById(message['uid'])
         message['sender_name'] = sender['user_name']
+        message['profile_img'] = sender['profile_img']
     return render_template('chat.html',
                             user_name=user_name,
                             user_id=user_id,
