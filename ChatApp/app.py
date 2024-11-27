@@ -128,8 +128,8 @@ def home():
     DB_user = dbConnect.getUserById(uid)
     if DB_user:
         profile_img = DB_user["profile_img"]
-    return render_template("home.html", profile_img=profile_img)
-
+        return render_template("home.html", profile_img=profile_img)
+    return render_template("registration/login.html")
 
 # apptitle.htmlにアクセスするためのエンドポイントの指定
 @app.route("/")
