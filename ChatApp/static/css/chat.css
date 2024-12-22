@@ -117,7 +117,7 @@
     background-color: aqua;
 }
 
-.send-msg form {
+.send-msg .form {
     display: flex;
     justify-content: space-between;
     align-items: end;

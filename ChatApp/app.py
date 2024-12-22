@@ -1,5 +1,5 @@
 # flask、必要なライブラリをインポート
-from flask import Flask, request, redirect, render_template, url_for, session, flash, abort
+from flask import Flask, request, redirect, render_template, url_for, session, flash, jsonify
 from datetime import timedelta
 from werkzeug.utils import secure_filename
 import datetime
@@ -27,7 +27,7 @@ app.permanent_session_lifetime = timedelta(days=30)
 def handle_time():
     now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
     now_hour = now.hour
-    if (1 <= now_hour < 6):  # テスト
+    if (3 <= now_hour < 6):  # テスト
         # if (22 <= now_hour < 24) or (0 <= now_hour < 6):
         return render_template('anger-mon.html')
     return None
@@ -482,6 +482,24 @@ def message(cid):
 
 
 # メッセージの投稿
+# @app.route('/post_message', methods=['POST'])
+# def add_message():
+#     time = handle_time()
+#     if time:
+#         return time
+
+#     DB_user = session_check()
+#     if DB_user is None:
+#         flash('もう一度ログインしてね！', 'flash ng')
+#         return render_template('registration/login.html')
+
+#     message = request.form.get('message')
+#     cid = request.form.get('cid')
+#     if message:
+#         uid = DB_user['uid']
+#         dbConnect.createMessage(uid, cid, message)
+#     return redirect(f'/group/{cid}')
+
 @app.route('/post_message', methods=['POST'])
 def add_message():
     time = handle_time()
@@ -492,13 +510,20 @@ def add_message():
     if DB_user is None:
         flash('もう一度ログインしてね！', 'flash ng')
         return render_template('registration/login.html')
-
+    
+    # クライアントから送られたデータを取得
     message = request.form.get('message')
     cid = request.form.get('cid')
+    print(f"cid>>>>>{cid}")
+    # データベースにメッセージを保存
     if message:
         uid = DB_user['uid']
         dbConnect.createMessage(uid, cid, message)
-    return redirect(f'/group/{cid}')
+
+    # 最新メッセージを取得して返却
+    messages = dbConnect.getMessageAll(cid)  # チャットIDに関連する全メッセージを取得
+    print(f'messages>>{messages}')
+    return jsonify({'status':'success', 'messages': messages, 'user_id': uid})
 
 
 # メッセージの更新と削除

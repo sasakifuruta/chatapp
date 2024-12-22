@@ -157,7 +157,7 @@ class dbConnect:
             group = cur.fetchone()
             return group
         except Exception as e:
-            print(f'エラーが発生しています: {e}')
+            print(f'エラーが発生していますgetGroupById: {e} cid>>>{cid}')
             abort(500)
         finally:
             cur.close()
@@ -175,7 +175,7 @@ class dbConnect:
             group = cur.fetchone()
             return group
         except Exception as e:
-            print(f'エラーが発生しています: {e}')
+            print(f'エラーが発生していますgetGroupByName: {e}')
             abort(500)
         finally:
             cur.close()
@@ -244,7 +244,7 @@ class dbConnect:
             messages = cur.fetchall()
             return messages
         except Exception as e:
-            print(f'エラーが発生しています: {e}')
+            print(f'エラーが発生していますgetMessageAll: {e} cid>>{cid}')
             abort(500)
         finally:
             cur.close()
@@ -261,7 +261,7 @@ class dbConnect:
             cur.execute(sql, (uid, cid, content))
             conn.commit()
         except Exception as e:
-            print(f'エラーが発生しています: {e}')
+            print(f'エラーが発生していますcreateMessage: {e} cid>>{cid}')
             abort(500)
         finally:
             cur.close()
